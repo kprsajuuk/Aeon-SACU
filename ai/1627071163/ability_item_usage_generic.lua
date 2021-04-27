@@ -137,6 +137,12 @@ local bInstallChatCallbackDone = false
 local nReplyHumanTime = nil
 local sHumanString = nil
 local bAllChat = false
+
+local lastTalk = 0
+local tauntTalkWait = RandomInt(10, 30)
+local defeatTalk = false
+local killTalk = false
+local currentKill = 0
 function X.SetTalkMessage()
 	local nBotID = bot:GetPlayerID()
 	local nCurrentGold = bot:GetGold()
@@ -151,6 +157,17 @@ function X.SetTalkMessage()
 		then
 			bInstallChatCallbackDone = true
 			InstallChatCallback( function( tChat ) X.SetReplyHumanTime( tChat ) end )
+		end
+
+		if DotaTime() > lastTalk + tauntTalkWait and bot:IsAlive()
+		then
+			local chatString = J.Chat.GetReplyString( '', bAllChat )
+			if chatString ~= nil
+			then
+				bot:ActionImmediate_Chat( chatString, bAllChat )
+				tauntTalkWait = RandomInt(10, 30)
+				lastTalk = DotaTime()
+			end
 		end
 
 		if sHumanString ~= nil
@@ -174,16 +191,31 @@ function X.SetTalkMessage()
 		end
 	end
 
+	if bot:IsAlive() and defeatTalk then defeatTalk = false end
+	if not bot:IsAlive() and not defeatTalk
+	then
+		local defeatString = J.Chat.GetDefeatReplyString( GetHeroDeaths( nBotID ) )
+		bot:ActionImmediate_Chat( defeatString, true )
+		defeatTalk = true
+	end
+
+	if bot:IsAlive() and GetHeroKills( nBotID ) > currentKill
+	then
+		local killString = J.Chat.GetKillReplyString( GetHeroKills( nBotID ) )
+		bot:ActionImmediate_Chat( killString, true )
+		currentKill = GetHeroKills( nBotID )
+	end
+
 	--发问号
 	if bot:IsAlive()
 		and nCurrentGold > nLastGold + 600 * nRate
 		and nCurrentKills > nLastKillCount
 		and RandomInt( 1, 9 ) > 4
 	then
-		local sTauntMark = "?"
-		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "??" end
-		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "???" end
-		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "??????" end
+		local sTauntMark = "喜欢我的高跟鞋底么，废物?"
+		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "被我终结你丑恶的一生是你的荣幸" end
+		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "终结吧!低级生物!" end
+		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "毁灭吧!恶魔!" end
 		bot:ActionImmediate_Chat( sTauntMark, true )
 	end
 
@@ -211,7 +243,7 @@ function X.SetTalkMessage()
 		and nCurrentDeaths >= nJiDiCount
 		and J.Role.NotSayJiDi()
 	then
-		local sJiDi = RandomInt( 1, 9 ) >= 3 and "jidi, xiayiba" or "jidi, gkd"
+		local sJiDi = RandomInt( 1, 9 ) >= 3 and "不可能...绝对不可能...我怎么可能会败给...你这种...废物..." or "不可能的...我怎么可能会..输给...你这蛆虫..."
 		bot:ActionImmediate_Chat( sJiDi, true )
 		J.Role['sayJiDi'] = true
 	end

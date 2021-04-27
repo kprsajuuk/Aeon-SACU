@@ -183,13 +183,13 @@ local sFirstList = {
 
 local sSecondList = {
 	
-	"npc_dota_hero_lina",
+	"npc_dota_hero_mirana",
 	
 }
 
 local sThirdList = {
 
-	"npc_dota_hero_mirana",
+	"npc_dota_hero_lina",
 
 }
 
@@ -236,11 +236,11 @@ local sMidList = {
 
 
 tSelectPoolList = {
-	[1] = sPriestList,
+	[1] = sMidList,
 	[2] = sMageList,
 	[3] = sCarryList,
 	[4] = sTankList,
-	[5] = sMidList,
+	[5] = sPriestList,
 }
 
 tRecommendSelectPoolList = {
@@ -676,7 +676,7 @@ function X.GetRandomNameList( sStarList )
 		table.remove( sStarList, nRand )
 	end
 
-	return sNameList
+	return {"月之女祭司","女魔法师","女骑士","女射手","女神官"}
 
 end
 

@@ -3855,36 +3855,59 @@ function Chat.GetChatTableString( nIndex, bAllChat )
 
 end
 
-
+local ChatSentences = require( GetScriptDirectory()..'/FunLib/goddess_chat' )
 
 function Chat.GetReplyString( sString, bAllChat )
 
 	local sReplyString = nil
-
-	local nIndex = Chat.GetChatStringTableIndex( sString )
-
-	if nIndex ~= - 1
+	local team = 'goddess'
+	if team == 'goddess'
 	then
-		sReplyString = Chat.GetChatTableString( nIndex, bAllChat )
+		sReplyString = ChatSentences[RandomInt(1, #ChatSentences)]
+		return sReplyString
 	else
-		--print( sString )
-		sReplyString = Chat.GetCheaterReplyString( sString )
-		if sReplyString == nil
+		local nIndex = Chat.GetChatStringTableIndex( sString )
+
+		if nIndex ~= - 1
 		then
-			sReplyString = Chat.GetRepeatString( sString )
-			if sReplyString == nil or RandomInt( 1, 99 ) > 88
-			then
-				sReplyString = "目前还没有这句话的回答, 快来群里设计吧."
-				if bAllChat then sReplyString = "不知道你在说什么" end
-			end
+			sReplyString = Chat.GetChatTableString( nIndex, bAllChat )
 		else
-			return nil
+			--print( sString )
+			sReplyString = Chat.GetCheaterReplyString( sString )
+			if sReplyString == nil
+			then
+				sReplyString = Chat.GetRepeatString( sString )
+				if sReplyString == nil or RandomInt( 1, 99 ) > 88
+				then
+					sReplyString = "目前还没有这句话的回答, 快来群里设计吧."
+					if bAllChat then sReplyString = "不知道你在说什么" end
+				end
+			else
+				return nil
+			end
 		end
+		return sReplyString
 	end
-
-	return sReplyString
-
 end
+
+local DefeatSentences = require( GetScriptDirectory()..'/FunLib/goddess_defeat_chat' )
+
+function Chat.GetDefeatReplyString(defeatCount)
+	print(defeatCount)
+	local reply = nil
+	reply = DefeatSentences[RandomInt(1, #DefeatSentences)]
+	return reply
+end
+
+local KillSentences = require( GetScriptDirectory()..'/FunLib/goddess_kill_chat' )
+
+function Chat.GetKillReplyString(killCount)
+	print(killCount)
+	local reply = nil
+	reply = KillSentences[RandomInt(1, #KillSentences)]
+	return reply
+end
+
 
 
 function Chat.GetCheaterReplyString( sString )

@@ -1964,7 +1964,7 @@ function X.GetReplyMemberID()
 		end
 	end
 
-	X['replyMemberID'] = 5
+	X['replyMemberID'] = 1
 
 	return X['replyMemberID']
 

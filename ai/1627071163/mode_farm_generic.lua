@@ -93,7 +93,7 @@ function GetDesire()
 	if not bPushNoticeDone
 	   and DotaTime() < 0
 	   and GetTeam() == TEAM_DIRE
-	   and bot == GetTeamMember(5)
+	   and bot == GetTeamMember(1)
 	   and GetTeamPlayers(GetOpposingTeam())[5] ~= nil
 	   and IsPlayerBot( GetTeamPlayers(GetOpposingTeam())[5])
 	   and nPushNoticeTime == nil
@@ -106,7 +106,7 @@ function GetDesire()
 	if not bPushNoticeDone
 	   and DotaTime() < 0
 	   and bot:GetGold() < 300 
-	   and bot == GetTeamMember(5)
+	   and bot == GetTeamMember(1)
 	   and (GetTeam() ~= TEAM_DIRE 
 	         or nPushNoticeTime == nil
 			 or nPushNoticeTime + 2.0 < DotaTime())
@@ -123,14 +123,14 @@ function GetDesire()
 				firstMessage = sUserName
 			end
 		end	
-		
+		firstMessage = "污秽之物，今日便是你的死期"
 		bot:ActionImmediate_Chat( firstMessage, true)
 		
 		if not J.Role.IsUserMode()
 		then
 			if bAllNotice
 			then
-				bot:ActionImmediate_Chat("AI开车群:903256599, Copyright©2020 weibo@Dota2_决明子",true);
+				bot:ActionImmediate_Chat("我将以女神之名制裁你们",true);
 			else
 				local sNoticeMessage = sNoticeList[RandomInt(1,#sNoticeList)]
 				bot:ActionImmediate_Chat(sNoticeMessage,true);
@@ -288,9 +288,9 @@ function GetDesire()
 			J.Role['sayRate'] = true;
 			if RandomInt(1,6) < 3 
 			then
-				bot:ActionImmediate_Chat("我们预估获胜的概率低于百分之一,甘拜下风! Well played! ",true);
+				bot:ActionImmediate_Chat("绝对...绝对不要...输给你这种...肮脏的生物......绝对不要!",true);
 			else
-				bot:ActionImmediate_Chat("We estimate the probability of winning to be below 1%.Well played!",true);
+				bot:ActionImmediate_Chat("绝对...绝对不要...输给你这种...肮脏的生物......绝对不要!",true);
 			end
 		end
 		if allyKills > enemyKills + nWinCount and J.Role.NotSayRate() 
@@ -298,9 +298,9 @@ function GetDesire()
 		    J.Role['sayRate'] = true;
 			if RandomInt(1,6) < 3 
 			then
-				bot:ActionImmediate_Chat("我们预估团战获胜的概率在百分之九十以上。",true);
+				bot:ActionImmediate_Chat("很快...女神的圣光就会将所有的污秽全部净化...",true);
 			else
-				bot:ActionImmediate_Chat("We estimate the probability of winning to above 90%.",true);
+				bot:ActionImmediate_Chat("很快...女神的圣光就会将所有的污秽全部净化...",true);
 			end
 		end
 	
