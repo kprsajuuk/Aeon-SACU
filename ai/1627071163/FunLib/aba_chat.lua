@@ -3893,18 +3893,34 @@ end
 local DefeatSentences = require( GetScriptDirectory()..'/FunLib/goddess_defeat_chat' )
 
 function Chat.GetDefeatReplyString(defeatCount)
-	print(defeatCount)
+	local list = {}
+	if defeatCount <= 3 then
+		list = DefeatSentences[1]
+	elseif defeatCount <= 6 then
+		list = DefeatSentences[2]
+	else
+		list = DefeatSentences[3]
+	end
 	local reply = nil
-	reply = DefeatSentences[RandomInt(1, #DefeatSentences)]
+	reply = list[RandomInt(1, #list)]
 	return reply
 end
 
 local KillSentences = require( GetScriptDirectory()..'/FunLib/goddess_kill_chat' )
 
 function Chat.GetKillReplyString(killCount)
+	local list = {}
+	if killCount <= 3 then
+		list = KillSentences[1]
+	elseif killCount <= 6 then
+		list = KillSentences[1]
+	else
+		list = KillSentences[1]
+	end
+
 	print(killCount)
 	local reply = nil
-	reply = KillSentences[RandomInt(1, #KillSentences)]
+	reply = list[RandomInt(1, #list)]
 	return reply
 end
 
