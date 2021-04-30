@@ -3897,9 +3897,9 @@ function Chat.GetDefeatReplyString(defeatCount)
 	if defeatCount <= 3 then
 		list = DefeatSentences[1]
 	elseif defeatCount <= 9 then
-		list = DefeatSentences[2]
+		list = DefeatSentences[1]
 	else
-		list = DefeatSentences[3]
+		list = DefeatSentences[1]
 	end
 	local reply = nil
 	reply = list[RandomInt(1, #list)]
@@ -3913,9 +3913,9 @@ function Chat.GetKillReplyString(killCount)
 	if killCount <= 1 then
 		list = KillSentences[1]
 	elseif killCount <= 9 then
-		list = KillSentences[1]
+		list = KillSentences[2]
 	else
-		list = KillSentences[1]
+		list = KillSentences[3]
 	end
 
 	print(killCount)

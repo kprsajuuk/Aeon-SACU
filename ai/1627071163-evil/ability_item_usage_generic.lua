@@ -139,7 +139,7 @@ local sHumanString = nil
 local bAllChat = false
 
 local lastTalk = 0
-local tauntTalkWait = RandomInt(10, 30)
+local tauntTalkWait = RandomInt(20, 40)
 local defeatTalk = false
 local killTalk = false
 local currentKill = 0
@@ -165,7 +165,7 @@ function X.SetTalkMessage()
 			if chatString ~= nil
 			then
 				bot:ActionImmediate_Chat( chatString, bAllChat )
-				tauntTalkWait = RandomInt(10, 30)
+				tauntTalkWait = RandomInt(20, 55)
 				lastTalk = DotaTime()
 			end
 		end
@@ -212,10 +212,10 @@ function X.SetTalkMessage()
 		and nCurrentKills > nLastKillCount
 		and RandomInt( 1, 9 ) > 4
 	then
-		local sTauntMark = "喜欢我的高跟鞋底么，废物?"
-		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "被我终结你丑恶的一生是你的荣幸" end
-		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "终结吧!低级生物!" end
-		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "毁灭吧!恶魔!" end
+		local sTauntMark = "哈哈中了我的陷阱了吧，胸大无脑的女神?"
+		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "无法逃脱的哦，我的陷阱。这可是专门针对女神的陷阱哦！" end
+		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "你这自大的母狗，终于倒在我的胯下了！" end
+		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "马上就用肉棒狠狠的调教你！" end
 		bot:ActionImmediate_Chat( sTauntMark, true )
 	end
 
@@ -243,7 +243,7 @@ function X.SetTalkMessage()
 		and nCurrentDeaths >= nJiDiCount
 		and J.Role.NotSayJiDi()
 	then
-		local sJiDi = RandomInt( 1, 9 ) >= 3 and "不可能...绝对不可能...我怎么可能会败给...你这种...废物..." or "不可能的...我怎么可能会..输给...你这蛆虫..."
+		local sJiDi = RandomInt( 1, 9 ) >= 3 and "不要以为这样就能保住你的处女小穴..." or "不要以为这样就能保住你的处女小穴..."
 		bot:ActionImmediate_Chat( sJiDi, true )
 		J.Role['sayJiDi'] = true
 	end
