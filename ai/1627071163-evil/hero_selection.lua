@@ -175,63 +175,76 @@ do
 end
 
 local sFirstList = {
-
-	"npc_dota_hero_luna",
-
-	
+	"npc_dota_hero_skeleton_king"
+	--"npc_dota_hero_skeleton_king",
+	--"npc_dota_hero_ursa",
+	--"npc_dota_hero_spirit_breaker",
 }
 
 local sSecondList = {
-	
-	"npc_dota_hero_mirana",
-	
+	"npc_dota_hero_slark"
+	--"npc_dota_hero_pudge",
+	--"npc_dota_hero_life_stealer",
+	--"npc_dota_hero_slark",
 }
 
 local sThirdList = {
-
-	"npc_dota_hero_lina",
-
+	"npc_dota_hero_pudge"
+	--"npc_dota_hero_doom_bringer",
 }
 
 local sFourthList = {
-		
-	"npc_dota_hero_windrunner",
-	
+	"npc_dota_hero_lion"
+	--"npc_dota_hero_night_stalker",
+	--"npc_dota_hero_bloodseeker",
+	--"npc_dota_hero_undying",
 }
 
 local sFifthList = {
-
-	"npc_dota_hero_crystal_maiden",
-	
+	"npc_dota_hero_bane"
+	--"npc_dota_hero_lion",
+	--"npc_dota_hero_shadow_shaman",
+	--"npc_dota_hero_bane",
+	--"npc_dota_hero_abyssal_underlord",
 }
 
 ---------------------------------------------------------
 ---------------------------------------------------------
 
 local sPriestList = {
-	"npc_dota_hero_crystal_maiden",
-
+	"npc_dota_hero_bane"
+	--"npc_dota_hero_doom_bringer",
 }
 
 local sMageList = {
-	"npc_dota_hero_lina",
-
+	"npc_dota_hero_lion"
+	--"npc_dota_hero_lion",
+	--"npc_dota_hero_shadow_shaman",
+	--"npc_dota_hero_bane",
+	--"npc_dota_hero_abyssal_underlord",
 }
 
 local sCarryList = {
-	"npc_dota_hero_luna",
-
+	"npc_dota_hero_skeleton_king"
+	--"npc_dota_hero_skeleton_king",
+	--"npc_dota_hero_ursa",
+	--"npc_dota_hero_spirit_breaker",
 }
 
 
 local sTankList = {
-	"npc_dota_hero_windrunner",
-
+	"npc_dota_hero_pudge"
+	--"npc_dota_hero_night_stalker",
+	--"npc_dota_hero_bloodseeker",
+	--"npc_dota_hero_undying",
 }
 
 
 local sMidList = {
-	"npc_dota_hero_mirana",
+	"npc_dota_hero_slark"
+	--"npc_dota_hero_pudge",
+	--"npc_dota_hero_life_stealer",
+	--"npc_dota_hero_slark",
 }
 
 
@@ -676,7 +689,7 @@ function X.GetRandomNameList( sStarList )
 		table.remove( sStarList, nRand )
 	end
 
-	return {"月之女祭司","女魔法师","女骑士","女射手","女神官"}
+	return {"低级魔物","兽人巫师","魔族中将","混沌兽人","恶魔将军"}
 
 end
 

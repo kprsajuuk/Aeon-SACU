@@ -106,7 +106,7 @@ function GetDesire()
 	if not bPushNoticeDone
 	   and DotaTime() < 0
 	   and bot:GetGold() < 300 
-	   and bot == GetTeamMember(1)
+	   and bot == GetTeamMember(5)
 	   and (GetTeam() ~= TEAM_DIRE 
 	         or nPushNoticeTime == nil
 			 or nPushNoticeTime + 2.0 < DotaTime())

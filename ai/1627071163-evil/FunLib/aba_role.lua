@@ -1964,7 +1964,7 @@ function X.GetReplyMemberID()
 		end
 	end
 
-	X['replyMemberID'] = 1
+	X['replyMemberID'] = 3
 
 	return X['replyMemberID']
 
@@ -2145,6 +2145,7 @@ function X.IsABAHero()
 		["npc_dota_hero_shadow_shaman"] = true,
 		["npc_dota_hero_silencer"] = true,
 		["npc_dota_hero_skeleton_king"] = true,
+		["npc_dota_hero_doom_bringer"] = true,
 		["npc_dota_hero_skywrath_mage"] = true,
 		["npc_dota_hero_sniper"] = true,
 		["npc_dota_hero_sven"] = true,

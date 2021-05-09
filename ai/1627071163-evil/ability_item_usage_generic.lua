@@ -141,7 +141,6 @@ local bAllChat = false
 local lastTalk = 0
 local tauntTalkWait = RandomInt(20, 40)
 local defeatTalk = false
-local killTalk = false
 local currentKill = 0
 function X.SetTalkMessage()
 	local nBotID = bot:GetPlayerID()
@@ -164,8 +163,8 @@ function X.SetTalkMessage()
 			local chatString = J.Chat.GetReplyString( '', bAllChat )
 			if chatString ~= nil
 			then
-				bot:ActionImmediate_Chat( chatString, bAllChat )
-				tauntTalkWait = RandomInt(20, 55)
+				bot:ActionImmediate_Chat( chatString, true )
+				tauntTalkWait = RandomInt(20, 45)
 				lastTalk = DotaTime()
 			end
 		end
