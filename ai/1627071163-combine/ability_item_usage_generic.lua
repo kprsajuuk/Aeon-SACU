@@ -10,6 +10,7 @@
 
 local X = {}
 local bot = GetBot()
+
 local bDebugMode = ( 1 == 10 )
 
 if bot:IsInvulnerable() or not bot:IsHero() or bot:IsIllusion() or bot:GetUnitName() == "npc_dota_hero_techies"
@@ -131,19 +132,22 @@ local nLastKillCount = 999
 local nLastDeathCount = 0
 local nContinueKillCount = 0
 local nReplyHumanCount = 0
-local nMaxReplyCount = RandomInt( 5, 9 )
+local nMaxReplyCount = 9999
 local bInstallChatCallbackDone = false
 local nReplyHumanTime = nil
 local sHumanString = nil
 local bAllChat = false
-function X.SetTalkMessage()
 
+local lastTalk = 0
+local tauntTalkWait = RandomInt(20, 40)
+local defeatTalk = false
+local currentKill = 0
+function X.SetTalkMessage()
 	local nBotID = bot:GetPlayerID()
 	local nCurrentGold = bot:GetGold()
 	local nCurrentKills = GetHeroKills( nBotID )
 	local nCurrentDeaths = GetHeroDeaths( nBotID )
 	local nRate = GetGameMode() == 23 and 2.0 or 1.0
-
 	--回复玩家的对话
 	if nBotID == J.Role.GetReplyMemberID()
 		and nReplyHumanCount <= nMaxReplyCount
@@ -154,11 +158,22 @@ function X.SetTalkMessage()
 			InstallChatCallback( function( tChat ) X.SetReplyHumanTime( tChat ) end )
 		end
 
+		if DotaTime() > lastTalk + tauntTalkWait and bot:IsAlive()
+		then
+			local chatString = J.Chat.GetReplyString( '', bAllChat, GetTeam() == TEAM_DIRE  )
+			if chatString ~= nil
+			then
+				bot:ActionImmediate_Chat( chatString, true )
+				tauntTalkWait = RandomInt(20, 45)
+				lastTalk = DotaTime()
+			end
+		end
+
 		if sHumanString ~= nil
 			and nReplyHumanTime ~= nil
 			and DotaTime() > nReplyHumanTime + nTalkDelay
 		then
-			local chatString = J.Chat.GetReplyString( sHumanString, bAllChat )
+			local chatString = J.Chat.GetReplyString( sHumanString, bAllChat, GetTeam() == TEAM_DIRE )
 			if chatString ~= nil
 			then
 				if nReplyHumanCount == nMaxReplyCount
@@ -175,16 +190,31 @@ function X.SetTalkMessage()
 		end
 	end
 
+	if bot:IsAlive() and defeatTalk then defeatTalk = false end
+	if not bot:IsAlive() and not defeatTalk
+	then
+		local defeatString = J.Chat.GetDefeatReplyString( GetHeroDeaths( nBotID ), GetTeam() == TEAM_DIRE )
+		bot:ActionImmediate_Chat( defeatString, true )
+		defeatTalk = true
+	end
+
+	if bot:IsAlive() and GetHeroKills( nBotID ) > currentKill
+	then
+		local killString = J.Chat.GetKillReplyString( GetHeroKills( nBotID ), GetTeam() == TEAM_DIRE )
+		bot:ActionImmediate_Chat( killString, true )
+		currentKill = GetHeroKills( nBotID )
+	end
+
 	--发问号
 	if bot:IsAlive()
 		and nCurrentGold > nLastGold + 600 * nRate
 		and nCurrentKills > nLastKillCount
 		and RandomInt( 1, 9 ) > 4
 	then
-		local sTauntMark = "?"
-		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "??" end
-		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "???" end
-		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "??????" end
+		local sTauntMark = "哈哈中了我的陷阱了吧，胸大无脑的女神?"
+		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "无法逃脱的哦，我的陷阱。这可是专门针对女神的陷阱哦！" end
+		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "你这自大的母狗，终于倒在我的胯下了！" end
+		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "马上就用肉棒狠狠的调教你！" end
 		bot:ActionImmediate_Chat( sTauntMark, true )
 	end
 
@@ -212,7 +242,7 @@ function X.SetTalkMessage()
 		and nCurrentDeaths >= nJiDiCount
 		and J.Role.NotSayJiDi()
 	then
-		local sJiDi = RandomInt( 1, 9 ) >= 3 and "jidi, xiayiba" or "jidi, gkd"
+		local sJiDi = RandomInt( 1, 9 ) >= 3 and "不要以为这样就能保住你的处女小穴..." or "不要以为这样就能保住你的处女小穴..."
 		bot:ActionImmediate_Chat( sJiDi, true )
 		J.Role['sayJiDi'] = true
 	end
@@ -403,9 +433,7 @@ local function CourierUsageComplement()
 		end
 
 		if bAliveBot
-			and ( not X.IsInvFull( bot ) 
-					or currentTime <= 5 * 60
-					or ( bot.currListItemToBuy ~= nil and #bot.currListItemToBuy == 0 and bot.currentItemToBuy ~= 'item_travel_boots' ) )
+			and ( not X.IsInvFull( bot ) or ( bot.currListItemToBuy ~= nil and #bot.currListItemToBuy == 0 and bot.currentItemToBuy ~= 'item_travel_boots' ) )
 			and ( cState == COURIER_STATE_AT_BASE
 					or ( cState == COURIER_STATE_IDLE and npcCourier:DistanceFromFountain() < 800 ) )
 		then
@@ -2313,7 +2341,7 @@ X.ConsiderItemDesire["item_helm_of_the_dominator"] = function( hItem )
 				local nCreepHP = creep:GetHealth()
 				if nCreepHP > maxHP
 					and ( creep:GetHealth() / creep:GetMaxHealth() ) > 0.75
-					and ( not creep:IsAncientCreep() or hItem:GetName() == "item_helm_of_the_overlord" )
+					and ( not creep:IsAncientCreep() or hItem:GetName() == "item_helm_of_the_dominator_2" )
 					and not J.IsKeyWordUnit( "siege", creep )
 				then
 					hCreep = creep
@@ -2335,7 +2363,7 @@ end
 
 
 --大支配
-X.ConsiderItemDesire["item_helm_of_the_overlord"] = function( hItem )
+X.ConsiderItemDesire["item_helm_of_the_dominator_2"] = function( hItem )
 
 	return X.ConsiderItemDesire["item_helm_of_the_dominator"]( hItem )
 
@@ -4205,7 +4233,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 
 	if bot:GetHealth() < 240
 	then
-		local nProDamage = J.GetAttackProjectileDamageByRange( bot, 1600 ) * 2
+		local nProDamage = J.GetAttackProjectileDamageByRange( bot, 1600 )
 		if bot:GetHealth() < bot:GetActualIncomingDamage( nProDamage, DAMAGE_TYPE_PHYSICAL )
 		then return BOT_ACTION_DESIRE_NONE end
 	end
@@ -4220,7 +4248,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 	local sCastMotive = nil
 
 
-	local nMinTPDistance = 5500
+	local nMinTPDistance = 4800
 	local nMode = bot:GetActiveMode()
 	local nModeDesire = bot:GetActiveModeDesire()
 	local botLocation = bot:GetLocation()
@@ -4241,7 +4269,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 		local assignedLane = bot:GetAssignedLane()
 		local botAmount = GetAmountAlongLane( assignedLane, botLocation )
 		local laneFront = GetLaneFrontAmount( GetTeam(), assignedLane, false )
-		if botAmount.distance > nMinTPDistance - 500
+		if botAmount.distance > nMinTPDistance - 200
 			or botAmount.amount < laneFront / 5
 		then
 			tpLoc = X.GetLaningTPLocation( assignedLane )
@@ -4274,7 +4302,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 		end
 
 		if tpLoc ~= nil
-			and GetUnitToLocationDistance( bot, tpLoc ) > nMinTPDistance - 500
+			and GetUnitToLocationDistance( bot, tpLoc ) > nMinTPDistance - 200
 		then
 			hEffectTarget = tpLoc
 			sCastMotive = '前往守塔:'..sLane
@@ -4383,7 +4411,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 			and not bot:HasModifier( "modifier_item_urn_heal" )
 			and not bot:HasModifier( "modifier_item_spirit_vessel_heal" )
 			and not bot:HasModifier( "modifier_juggernaut_healing_ward_heal" )
-			and bot:DistanceFromFountain() > nMinTPDistance - 600
+			and bot:DistanceFromFountain() > nMinTPDistance
 		then
 			tpLoc = J.GetTeamFountain()
 			sCastMotive = '撤退:2'
@@ -4410,7 +4438,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 			and not bot:HasModifier( "modifier_juggernaut_healing_ward_heal" )
 			and not bot:HasModifier( "modifier_bottle_regeneration" )
 			and not bot:HasModifier( "modifier_tango_heal" )
-			and bot:DistanceFromFountain() > nMinTPDistance - 600
+			and bot:DistanceFromFountain() > nMinTPDistance
 		then
 			tpLoc = J.GetTeamFountain()
 			sCastMotive = '撤退:3'
@@ -4462,25 +4490,19 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 		local nNearEnemyList = bot:GetNearbyHeroes( 1400, true, BOT_MODE_NONE )
 		local nCreeps= bot:GetNearbyCreeps( 1600, true )
 		local mostFarmDesireLane, mostFarmDesire = J.GetMostFarmLaneDesire()
-		
-		local isTravelBootsAvailable = false
-		if J.IsItemAvailable( "item_travel_boots" )
-			or J.IsItemAvailable( "item_travel_boots_2" )
-		then
-			isTravelBootsAvailable = true
-		end
 
-		if mostFarmDesire > ( isTravelBootsAvailable and 0.7 or 0.8 )
+		if mostFarmDesire > 0.7
 			and #nNearEnemyList == 0
 			and #nCreeps == 0
 			and #nAttackAllyList == 0
 		then
 
-			if isTravelBootsAvailable
+			if J.IsItemAvailable( "item_travel_boots" )
+				or J.IsItemAvailable( "item_travel_boots_2" )
 			then
 				tpLoc = GetLaneFrontLocation( GetTeam(), mostFarmDesireLane, - 600 )
 				local nNearAllyList = J.GetAlliesNearLoc( tpLoc, 1600 )
-				if GetUnitToLocationDistance( bot, tpLoc ) > nMinTPDistance - 1500
+				if GetUnitToLocationDistance( bot, tpLoc ) > nMinTPDistance - 600
 					and #nNearAllyList == 0
 				then
 					J.Role['lastFarmTpTime'] = DotaTime()
@@ -4494,7 +4516,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 			local nNearAllyList = J.GetAlliesNearLoc( tpLoc, 1600 )
 			if bestTpLoc ~= nil
 				and J.IsLocHaveTower( 1850, false, tpLoc )
-				and GetUnitToLocationDistance( bot, bestTpLoc ) > nMinTPDistance - 800
+				and GetUnitToLocationDistance( bot, bestTpLoc ) > nMinTPDistance
 				and #nNearAllyList == 0
 			then
 				J.Role['lastFarmTpTime'] = DotaTime()
@@ -4515,20 +4537,13 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 	then
 		local nNearEnemyList = bot:GetNearbyHeroes( 1400, true, BOT_MODE_NONE )
 		local nTeamFightLocation = J.GetTeamFightLocation( bot )
-		local isTravelBootsAvailable = false
-		if J.IsItemAvailable( "item_travel_boots" )
-			or J.IsItemAvailable( "item_travel_boots_2" )
-		then
-			isTravelBootsAvailable = true
-		end
-		
-		
 		if #nNearEnemyList == 0
 			and nTeamFightLocation ~= nil
-			and GetUnitToLocationDistance( bot, nTeamFightLocation ) > nMinTPDistance - 1200
+			and GetUnitToLocationDistance( bot, nTeamFightLocation ) > nMinTPDistance - 900
 		then
 
-			if isTravelBootsAvailable
+			if J.IsItemAvailable( "item_travel_boots" )
+				or J.IsItemAvailable( "item_travel_boots_2" )
 			then
 				sCastMotive = '飞鞋支援团战距离:'..GetUnitToLocationDistance( bot, nTeamFightLocation )
 				return BOT_ACTION_DESIRE_HIGH, nTeamFightLocation, sCastType, sCastMotive
@@ -4593,7 +4608,7 @@ X.ConsiderItemDesire["item_tpscroll"] = function( hItem )
 		and not bot:HasModifier( "modifier_arc_warden_tempest_double" )
 	then
 		if	X.CanJuke()
-			and bot:DistanceFromFountain() > nMinTPDistance + 200
+			and bot:DistanceFromFountain() > nMinTPDistance + 600
 			and nEnemyCount <= 1 and nAllyCount <= 1
 			and J.GetProperTarget( bot ) == nil
 			and itemFlask == nil
