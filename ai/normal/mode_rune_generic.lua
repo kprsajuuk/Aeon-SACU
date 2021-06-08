@@ -70,15 +70,13 @@ function GetDesire()
 	
 	minute = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
-
---[[	
+	
 	if  not Role.IsPowerRuneKnown()
 		and ( GetRuneStatus( RUNE_POWERUP_1 ) == RUNE_STATUS_AVAILABLE 
 		      or GetRuneStatus( RUNE_POWERUP_1 ) == RUNE_STATUS_AVAILABLE )
 	then
 		Role["lastPowerRuneTime"] = DotaTime()
 	end	
---]]
 	
 	
 	if not X.IsSuitableToPickRune() then
@@ -334,7 +332,7 @@ function X.GetBotClosestRune()
 			and not X.IsThereMidlaner(rLoc) 
 			and not X.IsThereCarry(rLoc) 
 		    and not X.IsMissing(r)
-			--and not X.IsKnown(r)
+			and not X.IsKnown(r)
 		    and X.IsTheClosestOne(rLoc)
 		then
 			local dist = GetUnitToLocationDistance(bot, rLoc)
@@ -362,9 +360,7 @@ function X.IsMissing(r)
     return false
 end
 
-
-
-function X.IsKnown(r) --存在问题
+function X.IsKnown(r)
 	
 	if DotaTime() < 6 * 60
 		or DotaTime() > 39 * 60 + 50 then return false end  
@@ -376,7 +372,7 @@ function X.IsKnown(r) --存在问题
 		
 		if ( minute % 2 == 0 or sec < 52 )
 			and runeStatus == RUNE_STATUS_UNKNOWN
---			and Role.IsPowerRuneKnown()
+			and Role.IsPowerRuneKnown()
 		then
 			return true
 		end
@@ -660,14 +656,14 @@ end
 function X.GetGoOutLocation()
 
 	local nLane = bot:GetAssignedLane()	
-	local vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_MID_2),GetTower(GetTeam(),TOWER_MID_1):GetLocation(),300)
+	local vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_MID_3),GetTower(GetTeam(),TOWER_MID_1):GetLocation(),300)
 	
 	if nLane == LANE_BOT
 	then
-		vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_BOT_2),GetTower(GetTeam(),TOWER_BOT_1):GetLocation(),300)
+		vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_BOT_3),GetTower(GetTeam(),TOWER_BOT_1):GetLocation(),300)
 	elseif nLane == LANE_TOP
 	then
-		vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_TOP_2),GetTower(GetTeam(),TOWER_TOP_1):GetLocation(),300)
+		vLocation = X.GetXUnitsTowardsLocation(GetTower(GetTeam(),TOWER_TOP_3),GetTower(GetTeam(),TOWER_TOP_1):GetLocation(),300)
 	end
 	
 	return vLocation

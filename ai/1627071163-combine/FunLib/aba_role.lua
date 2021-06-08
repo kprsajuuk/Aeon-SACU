@@ -1964,7 +1964,7 @@ function X.GetReplyMemberID()
 		end
 	end
 
-	X['replyMemberID'] = 3
+	X['replyMemberID'] = 9
 
 	return X['replyMemberID']
 

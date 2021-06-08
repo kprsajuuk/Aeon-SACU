@@ -701,7 +701,7 @@ end
 
 function J.CanCastOnTargetAdvanced( npcTarget )
 
-	if npcTarget:GetUnitName() == 'npc_dota_hero_antimage' --and npcTarget:IsBot()
+	if npcTarget:GetUnitName() == 'npc_dota_hero_antimage' and npcTarget:IsBot()
 	then
 
 		if npcTarget:HasModifier( "modifier_antimage_spell_shield" )
@@ -716,7 +716,7 @@ function J.CanCastOnTargetAdvanced( npcTarget )
 			or npcTarget:IsNightmared()
 			or npcTarget:IsChanneling()
 			or J.IsTaunted( npcTarget )
-			or npcTarget:GetMana() < 45
+			or npcTarget:GetMana() < 60
 			or ( npcTarget:HasModifier( "modifier_antimage_spell_shield" )
 				and J.GetModifierTime( npcTarget, "modifier_antimage_spell_shield" ) < 0.27 )
 		then

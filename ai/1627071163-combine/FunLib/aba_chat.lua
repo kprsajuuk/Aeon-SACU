@@ -3861,14 +3861,18 @@ local GoddessChatSentences = require( GetScriptDirectory()..'/FunLib/goddess_cha
 function Chat.GetReplyString( sString, bAllChat, isDire )
 
 	local sReplyString = nil
-	if isDire
+	if bAllChat
 	then
-		sReplyString = EvilChatSentences[RandomInt(1, #EvilChatSentences)]
-		return sReplyString
-	else
-		sReplyString = GoddessChatSentences[RandomInt(1, #GoddessChatSentences)]
-		return sReplyString
+		if isDire
+		then
+			sReplyString = EvilChatSentences[RandomInt(1, #EvilChatSentences)]
+			return sReplyString
+		else
+			sReplyString = GoddessChatSentences[RandomInt(1, #GoddessChatSentences)]
+			return sReplyString
+		end
 	end
+	return sReplyString
 end
 
 local EvilDefeatSentences = require( GetScriptDirectory()..'/FunLib/evil_defeat_chat' )

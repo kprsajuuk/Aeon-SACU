@@ -254,53 +254,47 @@ Chat['tSpWordList'] = {
 	
 	['user_call'] = ' 军师:',
 	
-	['aba_lineup_202007'] = '天地星AI·2020丶年七月版',
+	['aba_lineup_202007'] = '天地星AI·2020年七月版',
 	
-	['aba_lineup_202008'] = '天地星AI·2020丶年八月版',
+	['aba_lineup_202008'] = '天地星AI·2020年八月版',
 	
-	['aba_lineup_202009'] = '天地星AI·2020丶年九月版',
+	['aba_lineup_202009'] = '天地星AI·2020年九月版',
 	
-	['aba_lineup_2020d3'] = '天地星AI·2020丶年第三季版',
+	['aba_lineup_2020d3'] = '天地星AI·2020年第三季版',
 	
-	['aba_lineup_2020'] = '天地星AI·2020丶年版',
+	['aba_lineup_2020'] = '天地星AI·2020年版',
 	
-	['aba_lineup_202105'] = '天地星AI·2021丶年5月体验阵容版',
+	['aba_lineup_202105'] = '天地星AI·2021年5月体验版',
 	
-	['aba_lineup_202106'] = '天地星AI·2021丶年6月体验阵容版',
+	['aba_lineup_2021'] = '天地星AI·2021年版',
 	
-	['aba_lineup_2021'] = '天地星AI·2021丶年阵容版',
+	['aba_all_202007'] = '天地星AI·2020年七月完全版',
 	
-	['aba_all_202007'] = '天地星AI·2020丶年七月完全版',
+	['aba_all_202008'] = '天地星AI·2020年八月完全版',
 	
-	['aba_all_202008'] = '天地星AI·2020丶年八月完全版',
+	['aba_all_202009'] = '天地星AI·2020年九月完全版',
 	
-	['aba_all_202009'] = '天地星AI·2020丶年九月完全版',
+	['aba_all_2020d3'] = '天地星AI·2020年第三季完全版',
 	
-	['aba_all_2020d3'] = '天地星AI·2020丶年第三季完全版',
+	['aba_all_2020'] = '天地星AI·2020年完全版',
 	
-	['aba_all_2020'] = '天地星AI·2020丶年完全版',
+	['aba_all_202105'] = '天地星AI·2021年5月体验版',
 	
-	['aba_all_202105'] = '天地星AI·2021丶年5月体验版',
+	['aba_all_2021'] = '天地星AI·2021年完全版',
 	
-	['aba_all_202106'] = '天地星AI·2021丶年6月体验版',
+	['sa_all_202007'] = 'SiriusAI拓展天地星·2020七月完全版',
 	
-	['aba_all_2021'] = '天地星AI·2021丶年完全版',
+	['sa_all_202008'] = 'SiriusAI拓展天地星·2020八月完全版',
 	
-	['sa_all_202007'] = 'SiriusAI拓展天地星·2020丶七月完全版',
+	['sa_all_202009'] = 'SiriusAI拓展天地星·2020九月完全版',
 	
-	['sa_all_202008'] = 'SiriusAI拓展天地星·2020丶八月完全版',
+	['sa_all_2020d3'] = 'SiriusAI拓展天地星·2020年第三季完全版',
 	
-	['sa_all_202009'] = 'SiriusAI拓展天地星·2020丶九月完全版',
+	['sa_all_2020'] = 'SiriusAI拓展天地星·2020年完全版',
 	
-	['sa_all_2020d3'] = 'SiriusAI拓展天地星·2020丶年第三季完全版',
+	['sa_all_202105'] = 'SiriusAI拓展天地星·2021年5月体验版',
 	
-	['sa_all_2020'] = 'SiriusAI拓展天地星·2020丶年完全版',
-	
-	['sa_all_202105'] = 'SiriusAI拓展天地星·2021丶年5月体验版',
-	
-	['sa_all_202106'] = 'SiriusAI拓展天地星·2021丶年6月体验版',
-	
-	['sa_all_2021'] = 'SiriusAI拓展天地星·2021丶年完全版',
+	['sa_all_2021'] = 'SiriusAI拓展天地星·2021年完全版',
 
 
 }
@@ -1654,7 +1648,7 @@ Chat['tItemNameList'] = {
 	},
 
 	[168] = {
-		['sRawName'] = 'item_helm_of_the_overlord',
+		['sRawName'] = 'item_helm_of_the_dominator_2',
 		['sShortName'] = 'itemNull',
 		['sCnName'] = '统御头盔',
 		['sEnName'] = 0,
@@ -3536,7 +3530,7 @@ Chat['tHeroNameList'] = {
 	
 	-- 121
 	['npc_dota_hero_dawnbreaker'] = {
-		['sNormName'] = '锤妹',
+		['sNormName'] = '破晓晨星',
 		['sShortName'] = 'dawnbreaker',
 		['sCnName'] = '破晓晨星',
 		['sEnName'] = 0,
@@ -3861,36 +3855,75 @@ function Chat.GetChatTableString( nIndex, bAllChat )
 
 end
 
-
+local ChatSentences = require( GetScriptDirectory()..'/FunLib/evil_chat' )
 
 function Chat.GetReplyString( sString, bAllChat )
 
 	local sReplyString = nil
-
-	local nIndex = Chat.GetChatStringTableIndex( sString )
-
-	if nIndex ~= - 1
+	local team = 'evil'
+	if team == 'evil'
 	then
-		sReplyString = Chat.GetChatTableString( nIndex, bAllChat )
+		sReplyString = ChatSentences[RandomInt(1, #ChatSentences)]
+		return sReplyString
 	else
-		--print( sString )
-		sReplyString = Chat.GetCheaterReplyString( sString )
-		if sReplyString == nil
+		local nIndex = Chat.GetChatStringTableIndex( sString )
+
+		if nIndex ~= - 1
 		then
-			sReplyString = Chat.GetRepeatString( sString )
-			if sReplyString == nil or RandomInt( 1, 99 ) > 88
-			then
-				sReplyString = "目前还没有这句话的回答, 快来群里设计吧."
-				if bAllChat then sReplyString = "不知道你在说什么" end
-			end
+			sReplyString = Chat.GetChatTableString( nIndex, bAllChat )
 		else
-			return nil
+			--print( sString )
+			sReplyString = Chat.GetCheaterReplyString( sString )
+			if sReplyString == nil
+			then
+				sReplyString = Chat.GetRepeatString( sString )
+				if sReplyString == nil or RandomInt( 1, 99 ) > 88
+				then
+					sReplyString = "目前还没有这句话的回答, 快来群里设计吧."
+					if bAllChat then sReplyString = "不知道你在说什么" end
+				end
+			else
+				return nil
+			end
 		end
+		return sReplyString
+	end
+end
+
+local DefeatSentences = require( GetScriptDirectory()..'/FunLib/evil_defeat_chat' )
+
+function Chat.GetDefeatReplyString(defeatCount)
+	local list = {}
+	if defeatCount <= 3 then
+		list = DefeatSentences[1]
+	elseif defeatCount <= 9 then
+		list = DefeatSentences[1]
+	else
+		list = DefeatSentences[1]
+	end
+	local reply = nil
+	reply = list[RandomInt(1, #list)]
+	return reply
+end
+
+local KillSentences = require( GetScriptDirectory()..'/FunLib/evil_kill_chat' )
+
+function Chat.GetKillReplyString(killCount)
+	local list = {}
+	if killCount <= 1 then
+		list = KillSentences[1]
+	elseif killCount <= 9 then
+		list = KillSentences[2]
+	else
+		list = KillSentences[3]
 	end
 
-	return sReplyString
-
+	print(killCount)
+	local reply = nil
+	reply = list[RandomInt(1, #list)]
+	return reply
 end
+
 
 
 function Chat.GetCheaterReplyString( sString )
@@ -3951,7 +3984,6 @@ function Chat.GetReplyTauntString()
 			"其实你不用这么来说你自己的.",
 			"原来你自己就是酱紫的呀.",
 			"自信点, 别这么说你自己.",
-			"放松点, 就你这样没事的.",
 			"反弹biubiubiu.",
 			"给爷爬~~~",
 	}

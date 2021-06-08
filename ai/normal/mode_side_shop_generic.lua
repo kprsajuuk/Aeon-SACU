@@ -23,7 +23,7 @@ local bEnemyTower2Destroyed = false
 function GetDesire()
 
 	local currentTime = DotaTime()
-	
+
 	if currentTime < 9 * 60 + 8
 		or bot:HasModifier("modifier_arc_warden_tempest_double") 
 		or bot:GetCurrentActionType() == BOT_ACTION_TYPE_IDLE 

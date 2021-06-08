@@ -139,7 +139,7 @@ local sHumanString = nil
 local bAllChat = false
 
 local lastTalk = 0
-local tauntTalkWait = RandomInt(20, 40)
+local tauntTalkWait = RandomInt(30, 80)
 local defeatTalk = false
 local currentKill = 0
 function X.SetTalkMessage()
@@ -158,6 +158,7 @@ function X.SetTalkMessage()
 			InstallChatCallback( function( tChat ) X.SetReplyHumanTime( tChat ) end )
 		end
 
+		
 		if DotaTime() > lastTalk + tauntTalkWait and bot:IsAlive()
 		then
 			local chatString = J.Chat.GetReplyString( '', bAllChat, GetTeam() == TEAM_DIRE  )

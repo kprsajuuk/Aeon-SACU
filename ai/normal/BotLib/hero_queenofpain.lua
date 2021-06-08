@@ -401,7 +401,7 @@ function X.ConsiderW()
 				or J.WillKillTarget( botTarget, bot:GetAttackDamage() * 2, DAMAGE_TYPE_PHYSICAL, 2.0 )
 			then
 			
-				hCastTarget = J.Site.GetXUnitsTowardsLocation( botTarget, bot:GetLocation(), 330 )
+				hCastTarget = J.GetXUnitsTowardsLocation( botTarget, bot:GetLocation(), 330 )
 				sCastMotive = 'W-进攻:'..J.Chat.GetNormName( botTarget )
 				return BOT_ACTION_DESIRE_HIGH, hCastTarget, sCastMotive
 				

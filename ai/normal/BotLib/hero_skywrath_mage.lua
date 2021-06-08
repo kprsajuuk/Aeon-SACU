@@ -558,9 +558,6 @@ function X.ConsiderR()
 
 
 	local nCastRange = abilityR:GetCastRange() + aetherRange
-	
-	if nCastRange > 1400 then nCastRange = 1400 end
-	
 	local nRadius = 170
 	local nCastPoint = abilityR:GetCastPoint()
 	local nManaCost = abilityR:GetManaCost()

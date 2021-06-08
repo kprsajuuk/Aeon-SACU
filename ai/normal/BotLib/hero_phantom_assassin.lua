@@ -38,7 +38,7 @@ local tOutFitList = {}
 tOutFitList['outfit_carry'] = {
 
 	"item_phantom_assassin_outfit",
---	"item_wraith_band",
+	"item_wraith_band",
 	"item_bfury",
 	"item_aghanims_shard",
 	"item_desolator",
