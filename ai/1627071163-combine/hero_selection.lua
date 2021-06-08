@@ -11,7 +11,7 @@
 local X = {}
 local bDebugMode = ( 1 == 10 )
 local sSelectHero = "npc_dota_hero_zuus"
-local fLastSlectTime, fLastRand, nRand = -100, 0, 0
+local fLastSlectTime, fLastRand, nRand = 0, 0, 0
 local nDelayTime = nil
 local nHumanCount = 0
 local sBanList = {}
@@ -161,193 +161,11 @@ local sUserKeyDir = Chat.GetUserKeyDir()
 
 
 local tRecommendLineupList = {
-				[1]={	"npc_dota_hero_viper",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_drow_ranger",
-						"npc_dota_hero_crystal_maiden",
-						"npc_dota_hero_silencer", },
-				[2]={	"npc_dota_hero_viper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[3]={	"npc_dota_hero_viper",
-						"npc_dota_hero_kunkka",
-						"npc_dota_hero_arc_warden",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[4]={	"npc_dota_hero_viper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_skywrath_mage",
-						"npc_dota_hero_silencer", },
-				[5]={	"npc_dota_hero_viper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[6]={	"npc_dota_hero_viper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_phantom_assassin",
-						"npc_dota_hero_skywrath_mage",
-						"npc_dota_hero_necrolyte", },
-				[7]={	"npc_dota_hero_viper",
-						"npc_dota_hero_ogre_magi",
-						"npc_dota_hero_antimage",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_witch_doctor", },
-				[8]={	"npc_dota_hero_viper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_phantom_assassin",
+				[1]={	"npc_dota_hero_luna",
 						"npc_dota_hero_lina",
-						"npc_dota_hero_necrolyte", },
-				[9]={	"npc_dota_hero_viper",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_phantom_lancer",
-						"npc_dota_hero_pugna",
-						"npc_dota_hero_death_prophet", },
-
-
-				[10]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_drow_ranger",
-						"npc_dota_hero_crystal_maiden",
-						"npc_dota_hero_silencer", },
-				[11]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_crystal_maiden",
-						"npc_dota_hero_silencer", },
-				[12]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[13]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_pugna",
-						"npc_dota_hero_warlock", },
-				[14]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[15]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_kunkka",
-						"npc_dota_hero_arc_warden",
-						"npc_dota_hero_skywrath_mage",
-						"npc_dota_hero_necrolyte", },
-				[16]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_kunkka",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[17]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[18]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_phantom_assassin",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[19]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_antimage",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[20]={	"npc_dota_hero_sniper",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_antimage",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-
-
-				[21]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_drow_ranger",
-						"npc_dota_hero_crystal_maiden",
-						"npc_dota_hero_silencer", },
-				[22]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[23]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", },
-				[24]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_kunkka",
-						"npc_dota_hero_arc_warden",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[25]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_sven",
-						"npc_dota_hero_skywrath_mage",
-						"npc_dota_hero_death_prophet", },
-				[26]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_phantom_assassin",
-						"npc_dota_hero_lina",
-						"npc_dota_hero_necrolyte", },
-				[27]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_antimage",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[28]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_phantom_assassin",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_oracle", },
-				[29]={	"npc_dota_hero_medusa",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_drow_ranger",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_silencer", },
-
-
-				[30]={	"npc_dota_hero_templar_assassin",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_drow_ranger",
-						"npc_dota_hero_crystal_maiden",
-						"npc_dota_hero_silencer", },
-				[31]={	"npc_dota_hero_templar_assassin",
-						"npc_dota_hero_kunkka",
-						"npc_dota_hero_arc_warden",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[32]={	"npc_dota_hero_templar_assassin",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_warlock", }, 
-				[33]={	"npc_dota_hero_templar_assassin",
-						"npc_dota_hero_skeleton_king",
-						"npc_dota_hero_phantom_assassin",
-						"npc_dota_hero_jakiro",
-						"npc_dota_hero_necrolyte", },
-				[34]={	"npc_dota_hero_templar_assassin",
-						"npc_dota_hero_chaos_knight",
-						"npc_dota_hero_antimage",
-						"npc_dota_hero_lina",
-						"npc_dota_hero_oracle", },
-
-				[35]={	"npc_dota_hero_razor",
-						"npc_dota_hero_bristleback",
-						"npc_dota_hero_bloodseeker",
-						"npc_dota_hero_zuus",
-						"npc_dota_hero_silencer", },
-				[36]={	"npc_dota_hero_razor",
-						"npc_dota_hero_ogre_magi",
-						"npc_dota_hero_phantom_lancer",
-						"npc_dota_hero_lina",
-						"npc_dota_hero_warlock", },
+						"npc_dota_hero_mirana",
+						"npc_dota_hero_windrunner",
+						"npc_dota_hero_crystal_maiden", },
 }
 
 for i = 1, #tRecommendLineupList
@@ -357,218 +175,85 @@ do
 end
 
 local sFirstList = {
-
-	"npc_dota_hero_silencer",
-	"npc_dota_hero_warlock",
-	"npc_dota_hero_necrolyte",
-	"npc_dota_hero_oracle",
-	"npc_dota_hero_witch_doctor",
-	"npc_dota_hero_lich",
-	"npc_dota_hero_death_prophet",
-	"npc_dota_hero_lion",
-	"npc_dota_hero_dazzle",
-	"npc_dota_hero_windrunner",
-
-	
+	"npc_dota_hero_skeleton_king"
+	--"npc_dota_hero_skeleton_king",
+	--"npc_dota_hero_ursa",
+	--"npc_dota_hero_spirit_breaker",
 }
 
 local sSecondList = {
-	
-	"npc_dota_hero_crystal_maiden",
-	"npc_dota_hero_zuus",
-	"npc_dota_hero_jakiro",
-	"npc_dota_hero_skywrath_mage",
-	"npc_dota_hero_lina",
-	"npc_dota_hero_queenofpain",
-	"npc_dota_hero_pugna",
-	"npc_dota_hero_shadow_shaman",
-	"npc_dota_hero_bane",
-	
+	"npc_dota_hero_slark"
+	--"npc_dota_hero_pudge",
+	--"npc_dota_hero_life_stealer",
+	--"npc_dota_hero_slark",
 }
 
 local sThirdList = {
-
-	"npc_dota_hero_sven",
-	"npc_dota_hero_luna",
-	"npc_dota_hero_antimage",
-	"npc_dota_hero_arc_warden",
-	"npc_dota_hero_drow_ranger",
-	"npc_dota_hero_bloodseeker",
-	"npc_dota_hero_phantom_assassin",
-	"npc_dota_hero_phantom_lancer",
-	"npc_dota_hero_naga_siren",
-	"npc_dota_hero_huskar",
-	"npc_dota_hero_riki",
-	"npc_dota_hero_bounty_hunter",
-	"npc_dota_hero_clinkz",
-	"npc_dota_hero_tidehunter",
-	"npc_dota_hero_axe",
-	"npc_dota_hero_slark",
-	"npc_dota_hero_juggernaut",
-
+	"npc_dota_hero_pudge"
+	--"npc_dota_hero_doom_bringer",
 }
 
 local sFourthList = {
-		
-	"npc_dota_hero_chaos_knight",
-	"npc_dota_hero_bristleback",
-	"npc_dota_hero_dragon_knight",
-	"npc_dota_hero_kunkka",
-	"npc_dota_hero_skeleton_king", 
-	"npc_dota_hero_ogre_magi",
-	"npc_dota_hero_sand_king",
-	"npc_dota_hero_bounty_hunter",
-	"npc_dota_hero_slardar",
-	"npc_dota_hero_legion_commander",
-	"npc_dota_hero_omniknight",
-	
+	"npc_dota_hero_lion"
+	--"npc_dota_hero_night_stalker",
+	--"npc_dota_hero_bloodseeker",
+	--"npc_dota_hero_undying",
 }
 
 local sFifthList = {
-
-	"npc_dota_hero_sniper",
-	"npc_dota_hero_viper",
-	"npc_dota_hero_nevermore",
-	"npc_dota_hero_medusa", 
-	"npc_dota_hero_templar_assassin",
-	"npc_dota_hero_razor",
-	"npc_dota_hero_mirana",
-	
+	"npc_dota_hero_bane"
+	--"npc_dota_hero_lion",
+	--"npc_dota_hero_shadow_shaman",
+	--"npc_dota_hero_bane",
+	--"npc_dota_hero_abyssal_underlord",
 }
 
 ---------------------------------------------------------
 ---------------------------------------------------------
 
 local sPriestList = {
-
-	"npc_dota_hero_death_prophet",
-	"npc_dota_hero_jakiro",
-	"npc_dota_hero_lich",
-	"npc_dota_hero_lina",
-	"npc_dota_hero_necrolyte",
-	"npc_dota_hero_oracle",
-	"npc_dota_hero_pugna",
-	"npc_dota_hero_shadow_shaman",
-	"npc_dota_hero_silencer",
-	"npc_dota_hero_skywrath_mage",
-	"npc_dota_hero_warlock",
-	"npc_dota_hero_witch_doctor",
-	"npc_dota_hero_zuus",
-	"npc_dota_hero_lion",
-	"npc_dota_hero_dazzle",
-	"npc_dota_hero_bane",
-	"npc_dota_hero_windrunner",
-	"npc_dota_hero_queenofpain",
-
+	"npc_dota_hero_bane"
+	--"npc_dota_hero_doom_bringer",
 }
 
 local sMageList = {
-
-	"npc_dota_hero_crystal_maiden",
-	"npc_dota_hero_death_prophet",
-	"npc_dota_hero_jakiro",
-	"npc_dota_hero_lich",
-	"npc_dota_hero_lina",
-	"npc_dota_hero_necrolyte",
-	"npc_dota_hero_oracle",
-	"npc_dota_hero_pugna",
-	"npc_dota_hero_shadow_shaman",
-	"npc_dota_hero_silencer",
-	"npc_dota_hero_skywrath_mage",
-	"npc_dota_hero_warlock",
-	"npc_dota_hero_witch_doctor",
-	"npc_dota_hero_zuus",
-	"npc_dota_hero_lion",
-	"npc_dota_hero_dazzle",
-	"npc_dota_hero_bane",
-	"npc_dota_hero_windrunner",
-	"npc_dota_hero_queenofpain",
-
+	"npc_dota_hero_lion"
+	--"npc_dota_hero_lion",
+	--"npc_dota_hero_shadow_shaman",
+	--"npc_dota_hero_bane",
+	--"npc_dota_hero_abyssal_underlord",
 }
 
 local sCarryList = {
-
-	"npc_dota_hero_antimage",
-	"npc_dota_hero_arc_warden",
-	"npc_dota_hero_bloodseeker",
-	"npc_dota_hero_bristleback",
-	"npc_dota_hero_chaos_knight",
-	"npc_dota_hero_clinkz",
-	"npc_dota_hero_drow_ranger",
-	"npc_dota_hero_huskar",
-	"npc_dota_hero_kunkka",
-	"npc_dota_hero_luna",
-	"npc_dota_hero_medusa",
-	"npc_dota_hero_nevermore",
-	"npc_dota_hero_phantom_assassin",
-	"npc_dota_hero_phantom_lancer",
-	"npc_dota_hero_razor",
-	"npc_dota_hero_skeleton_king",
-	"npc_dota_hero_sniper",
-	"npc_dota_hero_sven",
-	"npc_dota_hero_templar_assassin",
-	"npc_dota_hero_viper",
-	"npc_dota_hero_ogre_magi",
-	"npc_dota_hero_sand_king",
-	"npc_dota_hero_riki",
-	"npc_dota_hero_bounty_hunter",
-	"npc_dota_hero_slardar",
-	"npc_dota_hero_legion_commander",
-	"npc_dota_hero_omniknight",
-	"npc_dota_hero_tidehunter",
-	"npc_dota_hero_axe",
-	"npc_dota_hero_slark",
-	"npc_dota_hero_juggernaut",
-	"npc_dota_hero_mirana",
-	"npc_dota_hero_naga_siren",
-	"npc_dota_hero_naga_siren",
-
+	"npc_dota_hero_skeleton_king"
+	--"npc_dota_hero_skeleton_king",
+	--"npc_dota_hero_ursa",
+	--"npc_dota_hero_spirit_breaker",
 }
 
 
 local sTankList = {
-
-	"npc_dota_hero_bristleback",
-	"npc_dota_hero_chaos_knight",
-	"npc_dota_hero_dragon_knight",
-	"npc_dota_hero_kunkka",
-	"npc_dota_hero_ogre_magi",
-	"npc_dota_hero_skeleton_king",
-	"npc_dota_hero_sand_king",
-	"npc_dota_hero_bounty_hunter",
-	"npc_dota_hero_slardar",
-	"npc_dota_hero_legion_commander",
-	"npc_dota_hero_legion_commander",
-	"npc_dota_hero_omniknight",
-
+	"npc_dota_hero_pudge"
+	--"npc_dota_hero_night_stalker",
+	--"npc_dota_hero_bloodseeker",
+	--"npc_dota_hero_undying",
 }
 
 
 local sMidList = {
-
-	"npc_dota_hero_templar_assassin",
-	"npc_dota_hero_phantom_lancer",
-	"npc_dota_hero_arc_warden",
-	"npc_dota_hero_bristleback",
-	"npc_dota_hero_chaos_knight",
-	"npc_dota_hero_medusa", 
-	"npc_dota_hero_mirana",
-	"npc_dota_hero_nevermore",
-	"npc_dota_hero_razor",
-	"npc_dota_hero_sniper",
-	"npc_dota_hero_sniper",
-	"npc_dota_hero_viper",
-	"npc_dota_hero_viper",
-	
+	"npc_dota_hero_slark"
+	--"npc_dota_hero_pudge",
+	--"npc_dota_hero_life_stealer",
+	--"npc_dota_hero_slark",
 }
 
 
 tSelectPoolList = {
-	[1] = sPriestList,
+	[1] = sMidList,
 	[2] = sMageList,
 	[3] = sCarryList,
 	[4] = sTankList,
-	[5] = sMidList,
+	[5] = sPriestList,
 }
 
 tRecommendSelectPoolList = {
@@ -587,6 +272,25 @@ sSelectList = {
 	[4] = tSelectPoolList[4][RandomInt( 1, #tSelectPoolList[4] )],
 	[5] = tSelectPoolList[5][RandomInt( 1, #tSelectPoolList[5] )],
 }
+
+if GetTeam() == TEAM_DIRE
+	then
+		sSelectList = {
+			'npc_dota_hero_slark',
+			'npc_dota_hero_lion',
+			'npc_dota_hero_skeleton_king',
+			'npc_dota_hero_pudge',
+			'npc_dota_hero_bane'
+		}
+	else
+		sSelectList = {
+			'npc_dota_hero_mirana',
+			'npc_dota_hero_lina',
+			'npc_dota_hero_luna',
+			'npc_dota_hero_windrunner',
+			'npc_dota_hero_crystal_maiden'
+		}
+end
 
 --For Random Lineup-------------
 nRand = RandomInt( 1, 128 )
@@ -635,12 +339,6 @@ then
 			sHeroSetLineupList = Chat.GetHeroSelectList( HeroSet['ZhenRong'] )
 			
 			bLaneAssignActive = true 
-			if HeroSet['FenLuShengXiao'] ~= nil 
-				and Chat.GetRawGameWord( HeroSet['FenLuShengXiao'] ) == true --改用自动AI分路
-			then
-				bLaneAssignActive = false 
-			end
-				
 			sHeroSetLaneAssignList = Chat.GetLaneAssignList( HeroSet['FenLu'] )
 					
 			if Chat.GetRawGameWord( HeroSet['NeiBuTiaoXuan'] ) == true then bLineupReserve = true end	
@@ -679,7 +377,7 @@ end
 ------------------------------------------------
 ------------------------------------------------
 
-------随机交换分路-------------
+------随机分路-------------
 function X.GetRandomChangeLane( tLane )
 
 	if bDebugMode then return tLane end
@@ -731,13 +429,6 @@ function X.SetLineupInit()
 
 	if bLineupActive then sSelectList = sHeroSetLineupList end
 	if bLaneAssignActive then tLaneAssignList = sHeroSetLaneAssignList end
-	
-	--如果启用了内部挑选, 则不改变
-	if bLineupReserve 
-	then 
-		bInitLineupDone = true
-		return 
-	end
 
 	local nIDs = GetTeamPlayers( GetTeam() )
 	for i, id in pairs( nIDs )
@@ -1017,8 +708,12 @@ function X.GetRandomNameList( sStarList )
 		table.remove( sStarList, nRand )
 	end
 
-	return sNameList
-
+	if GetTeam() == TEAM_DIRE
+	then
+		return {"低级魔物","兽人巫师","魔族中将","混沌兽人","恶魔将军"}
+	else
+		return {"月之女祭司","女魔法师","女骑士","女射手","女神官"}
+	end
 end
 
 
@@ -1030,19 +725,19 @@ function Think()
 	if GetGameState() == GAME_STATE_HERO_SELECTION then
 		InstallChatCallback( function ( tChat ) X.SetChatHeroBan( tChat.string ) end )
 	end
-	
-	if Role["bLobbyGame"] == false then Role["bLobbyGame"] = true end
 
-	if ( GameTime() < 3.0 and not bLineupReserve )
+	if GameTime() < 3.0
 	   or fLastSlectTime > GameTime() - fLastRand
 	   or X.IsHumanNotReady( GetTeam() )
 	   or X.IsHumanNotReady( GetOpposingTeam() )
 	then 
-		if GetGameMode() ~= 23 then return end  --非加速则延迟挑选, 加速模式延迟挑选有BUG
+		if GetGameMode() ~= 23 then return end
 	end
 
 	if nDelayTime == nil then nDelayTime = GameTime() fLastRand = RandomFloat( 1.2, 3.4 ) end
 	if nDelayTime ~= nil and nDelayTime > GameTime() - fLastRand then return end
+
+	if Role["bLobbyGame"] == false then Role["bLobbyGame"] = true end
 	
 	--自定义挑选
 	if bLineupActive
@@ -1091,7 +786,7 @@ function Think()
 
 			-------******************************-----------------------------------------------
 			--if GetTeam() ~= TEAM_DIRE and i == 2 then sSelectHero = "npc_dota_hero_lina" end 
-
+	
 			------------------------------------------------------------------------------------
 
 			SelectHero( id, sSelectHero )
@@ -1117,8 +812,7 @@ end
 
 local sBotVersion = Role.GetBotVersion()
 local bPvNLaneAssignDone = false
-if bLaneAssignActive --手动分路
-	or ( sBotVersion == 'Mid' and ( not bUserMode or bLaneAssignActive ) )
+if bLaneAssignActive or sBotVersion == 'Mid'
 then
 
 function UpdateLaneAssignments()
