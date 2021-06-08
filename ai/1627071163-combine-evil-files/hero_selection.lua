@@ -276,19 +276,19 @@ sSelectList = {
 if GetTeam() == TEAM_DIRE
 	then
 		sSelectList = {
-			'npc_dota_hero_slark',
-			'npc_dota_hero_lion',
+			--'npc_dota_hero_slark',
 			'npc_dota_hero_skeleton_king',
 			'npc_dota_hero_pudge',
-			'npc_dota_hero_bane'
+			'npc_dota_hero_bane',
+			'npc_dota_hero_slark',
+			'npc_dota_hero_lion'
 		}
 	else
 		sSelectList = {
-			--'npc_dota_hero_mirana',
+			'npc_dota_hero_mirana',
 			'npc_dota_hero_lina',
 			'npc_dota_hero_luna',
 			'npc_dota_hero_windrunner',
-			'npc_dota_hero_crystal_maiden',
 			'npc_dota_hero_crystal_maiden',
 		}
 end
@@ -713,9 +713,9 @@ function X.GetRandomNameList( sStarList )
 
 	if GetTeam() == TEAM_DIRE
 	then
-		return {"低级魔物","兽人巫师","魔族中将","混沌兽人","恶魔将军"}
+		return {"兽人巫师","魔族中将","混沌兽人","恶魔将军","恶魔将军"}
 	else
-		return {"女魔法师","女骑士","女射手","女神官","女神官"}
+		return {"月之女祭司", "女魔法师","女骑士","女射手","女神官"}
 	end
 end
 
