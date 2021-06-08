@@ -123,17 +123,24 @@ function GetDesire()
 				firstMessage = sUserName
 			end
 		end	
-		firstMessage = "准备好做我的性奴了吗？"
+		if GetTeam() == TEAM_DIRE
+		then
+			firstMessage = "准备好做我的性奴了吗？"
+		else
+			firstMessage = "污秽之物，今日便是你的死期"
+		end
 		bot:ActionImmediate_Chat( firstMessage, true)
 		
 		if not J.Role.IsUserMode()
 		then
 			if bAllNotice
 			then
-				bot:ActionImmediate_Chat("银雪女神？我看只是一只母狗而已。你的骚逼是不是已经饥渴难耐了？",true);
-			else
-				local sNoticeMessage = sNoticeList[RandomInt(1,#sNoticeList)]
-				bot:ActionImmediate_Chat(sNoticeMessage,true);
+				if GetTeam() == TEAM_DIRE
+				then
+					bot:ActionImmediate_Chat("银雪女神？我看只是一只母狗而已。你的骚逼是不是已经饥渴难耐了？",true);
+				else
+					bot:ActionImmediate_Chat("我将以女神之名制裁你们",true);
+				end
 			end
 		end
 		
@@ -286,24 +293,43 @@ function GetDesire()
 		if enemyKills > allyKills + nLostCount and J.Role.NotSayRate() 
 		then
 			J.Role['sayRate'] = true;
-			if RandomInt(1,6) < 3 
+			if GetTeam() == TEAM_DIRE
 			then
-				bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				if RandomInt(1,6) < 3 
+				then
+					bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				else
+					bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				end
 			else
-				bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				if RandomInt(1,6) < 3 
+				then
+					bot:ActionImmediate_Chat("绝对...绝对不要...输给你这种...肮脏的生物......绝对不要!",true);
+				else
+					bot:ActionImmediate_Chat("绝对...绝对不要...输给你这种...肮脏的生物......绝对不要!",true);
+				end
 			end
 		end
 		if allyKills > enemyKills + nWinCount and J.Role.NotSayRate() 
 		then
 		    J.Role['sayRate'] = true;
-			if RandomInt(1,6) < 3 
+			if GetTeam() == TEAM_DIRE
 			then
-				bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				if RandomInt(1,6) < 3 
+				then
+					bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				else
+					bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				end
 			else
-				bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				if RandomInt(1,6) < 3 
+				then
+					bot:ActionImmediate_Chat("很快...女神的圣光就会将所有的污秽全部净化...",true);
+				else
+					bot:ActionImmediate_Chat("很快...女神的圣光就会将所有的污秽全部净化...",true);
+				end
 			end
 		end
-	
 	end
 	if allyKills > enemyKills + 20 and aliveAllyCount >= 4
 	then return BOT_MODE_DESIRE_NONE; end

@@ -207,15 +207,24 @@ function X.SetTalkMessage()
 
 	--发问号
 	if bot:IsAlive()
-		and nCurrentGold > nLastGold + 600 * nRate
+		and nCurrentGold > nLastGold + 200 * nRate
 		and nCurrentKills > nLastKillCount
 		and RandomInt( 1, 9 ) > 4
 	then
-		local sTauntMark = "哈哈中了我的陷阱了吧，胸大无脑的女神?"
-		if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "无法逃脱的哦，我的陷阱。这可是专门针对女神的陷阱哦！" end
-		if nCurrentGold > nLastGold + 1000 * nRate then sTauntMark = "你这自大的母狗，终于倒在我的胯下了！" end
-		if nCurrentGold > nLastGold + 1500 * nRate then sTauntMark = "马上就用肉棒狠狠的调教你！" end
-		bot:ActionImmediate_Chat( sTauntMark, true )
+		if GetTeam() == TEAM_DIRE
+		then
+			local sTauntMark = "哈哈中了我的陷阱了吧，胸大无脑的女神?"
+			if nCurrentGold > nLastGold + 350 * nRate then sTauntMark = "无法逃脱的哦，我的陷阱。这可是专门针对女神的陷阱哦！" end
+			if nCurrentGold > nLastGold + 500 * nRate then sTauntMark = "你这自大的母狗，终于倒在我的胯下了！" end
+			if nCurrentGold > nLastGold + 650 * nRate then sTauntMark = "马上就用肉棒狠狠的调教你！" end
+			bot:ActionImmediate_Chat( sTauntMark, true )
+		else
+			local sTauntMark = "喜欢我的高跟鞋底么，废物?"
+			if nCurrentGold > nLastGold + 400 * nRate then sTauntMark = "被我终结你丑恶的一生是你的荣幸" end
+			if nCurrentGold > nLastGold + 600 * nRate then sTauntMark = "终结吧!低级生物!" end
+			if nCurrentGold > nLastGold + 800 * nRate then sTauntMark = "毁灭吧!恶魔!" end
+			bot:ActionImmediate_Chat( sTauntMark, true )
+		end
 	end
 
 	--发省略号
@@ -242,9 +251,16 @@ function X.SetTalkMessage()
 		and nCurrentDeaths >= nJiDiCount
 		and J.Role.NotSayJiDi()
 	then
-		local sJiDi = RandomInt( 1, 9 ) >= 3 and "不要以为这样就能保住你的处女小穴..." or "不要以为这样就能保住你的处女小穴..."
-		bot:ActionImmediate_Chat( sJiDi, true )
-		J.Role['sayJiDi'] = true
+		if GetTeam() == TEAM_DIRE
+		then
+			local sJiDi = RandomInt( 1, 9 ) >= 3 and "不要以为这样就能保住你的母狗小淫穴..." or "不要以为这样就能保住你的母狗小穴..."
+			bot:ActionImmediate_Chat( sJiDi, true )
+			J.Role['sayJiDi'] = true
+		else
+			local sJiDi = RandomInt( 1, 9 ) >= 3 and "不可能...绝对不可能...我怎么可能会败给...你这种...废物..." or "不可能的...我怎么可能会..输给...你这蛆虫..."
+			bot:ActionImmediate_Chat( sJiDi, true )
+			J.Role['sayJiDi'] = true
+		end
 	end
 
 	--计算连杀数量

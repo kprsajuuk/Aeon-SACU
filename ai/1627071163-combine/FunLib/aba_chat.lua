@@ -3855,76 +3855,77 @@ function Chat.GetChatTableString( nIndex, bAllChat )
 
 end
 
-local ChatSentences = require( GetScriptDirectory()..'/FunLib/evil_chat' )
+local EvilChatSentences = require( GetScriptDirectory()..'/FunLib/evil_chat' )
+local GoddessChatSentences = require( GetScriptDirectory()..'/FunLib/goddess_chat' )
 
 function Chat.GetReplyString( sString, bAllChat, isDire )
 
 	local sReplyString = nil
-	local team = 'evil'
-	if team == 'evil'
+	if isDire
 	then
-		sReplyString = ChatSentences[RandomInt(1, #ChatSentences)]
+		sReplyString = EvilChatSentences[RandomInt(1, #EvilChatSentences)]
 		return sReplyString
 	else
-		local nIndex = Chat.GetChatStringTableIndex( sString )
-
-		if nIndex ~= - 1
-		then
-			sReplyString = Chat.GetChatTableString( nIndex, bAllChat )
-		else
-			--print( sString )
-			sReplyString = Chat.GetCheaterReplyString( sString )
-			if sReplyString == nil
-			then
-				sReplyString = Chat.GetRepeatString( sString )
-				if sReplyString == nil or RandomInt( 1, 99 ) > 88
-				then
-					sReplyString = "目前还没有这句话的回答, 快来群里设计吧."
-					if bAllChat then sReplyString = "不知道你在说什么" end
-				end
-			else
-				return nil
-			end
-		end
+		sReplyString = GoddessChatSentences[RandomInt(1, #GoddessChatSentences)]
 		return sReplyString
 	end
 end
 
-local DefeatSentences = require( GetScriptDirectory()..'/FunLib/evil_defeat_chat' )
+local EvilDefeatSentences = require( GetScriptDirectory()..'/FunLib/evil_defeat_chat' )
+local GoddessDefeatSentences = require( GetScriptDirectory()..'/FunLib/goddess_defeat_chat' )
 
 function Chat.GetDefeatReplyString(defeatCount, isDire)
 	local list = {}
-	if defeatCount <= 3 then
-		list = DefeatSentences[1]
-	elseif defeatCount <= 9 then
-		list = DefeatSentences[1]
+	if isDire
+	then
+		if defeatCount <= 3 then
+			list = EvilDefeatSentences[1]
+		elseif defeatCount <= 9 then
+			list = EvilDefeatSentences[1]
+		else
+			list = EvilDefeatSentences[1]
+		end
 	else
-		list = DefeatSentences[1]
+		if defeatCount <= 1 then
+			list = GoddessDefeatSentences[1]
+		elseif defeatCount <= 9 then
+			list = GoddessDefeatSentences[2]
+		else
+			list = GoddessDefeatSentences[3]
+		end
 	end
 	local reply = nil
 	reply = list[RandomInt(1, #list)]
 	return reply
 end
 
-local KillSentences = require( GetScriptDirectory()..'/FunLib/evil_kill_chat' )
+local EvilKillSentences = require( GetScriptDirectory()..'/FunLib/evil_kill_chat' )
+local GoddessKillSentences = require( GetScriptDirectory()..'/FunLib/goddess_kill_chat' )
 
 function Chat.GetKillReplyString(killCount, isDire)
 	local list = {}
-	if killCount <= 1 then
-		list = KillSentences[1]
-	elseif killCount <= 9 then
-		list = KillSentences[2]
+	if isDire
+	then
+		if killCount <= 1 then
+			list = EvilKillSentences[1]
+		elseif killCount <= 9 then
+			list = EvilKillSentences[2]
+		else
+			list = EvilKillSentences[3]
+		end
 	else
-		list = KillSentences[3]
+		if killCount <= 3 then
+			list = GoddessKillSentences[1]
+		elseif killCount <= 9 then
+			list = GoddessKillSentences[1]
+		else
+			list = GoddessKillSentences[1]
+		end
 	end
-
-	print(killCount)
 	local reply = nil
 	reply = list[RandomInt(1, #list)]
 	return reply
 end
-
-
 
 function Chat.GetCheaterReplyString( sString )
 
