@@ -159,7 +159,6 @@ local sUserKeyDir = Chat.GetUserKeyDir()
 --]]
 
 
-
 local tRecommendLineupList = {
 				[1]={	"npc_dota_hero_luna",
 						"npc_dota_hero_lina",
@@ -167,6 +166,16 @@ local tRecommendLineupList = {
 						"npc_dota_hero_windrunner",
 						"npc_dota_hero_crystal_maiden", },
 }
+if GetTeam() == TEAM_DIRE
+	then
+		tRecommendLineupList = {
+			[1]={	'npc_dota_hero_slark',
+					'npc_dota_hero_lion',
+					'npc_dota_hero_skeleton_king',
+					'npc_dota_hero_pudge',
+					'npc_dota_hero_bane', },
+		}
+end
 
 for i = 1, #tRecommendLineupList
 do 
@@ -285,11 +294,11 @@ if GetTeam() == TEAM_DIRE
 	else
 		sSelectList = {
 			--'npc_dota_hero_mirana',
-			'npc_dota_hero_lina',
 			'npc_dota_hero_luna',
 			'npc_dota_hero_windrunner',
 			'npc_dota_hero_crystal_maiden',
 			'npc_dota_hero_crystal_maiden',
+			'npc_dota_hero_lina',
 		}
 end
 tSelectPoolList = sSelectList
