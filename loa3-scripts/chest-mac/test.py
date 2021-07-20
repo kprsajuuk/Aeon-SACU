@@ -9,6 +9,9 @@ import threading
 import pyscreenshot as ImageGrab
 import numpy as np
 import matplotlib.pyplot as plt
+import PIL.ImageGrab
+from mss import mss
+from PIL import Image
 
 mouse = Controller()
 wifi = pywifi.PyWiFi()
@@ -16,7 +19,7 @@ iface = wifi.interfaces()[0]
 
 global thread
 
-closeWhenFinished = False
+closeWhenFinished = True
 
 open_pos = (579, 822)
 confirm_pos = (890, 898)
@@ -29,7 +32,10 @@ boss_pos = (970, 903)
 refresh_pos = (563, 160)
 guild_icon = (1175, 973)
 
-game_close_pos = ()
+game_close_pos = (270, 158)
+
+confirm_bbox = (847,887,947,919)
+open_bbox = (566,817,593,829)
 
 #wifi_name = "bdsoft-cobot"
 #wifi_pass = "78936479"
@@ -50,7 +56,7 @@ game_close_pos = ()
 wifi_name = "PKUSE"
 wifi_pass = "Bdsoft61137666"
 
-#wifi_name = "sscz_8DE0"
+#wifi_name = "sscz_2"
 #wifi_pass = "blackhole"
 
 test_input = (10, 100)
@@ -68,14 +74,20 @@ def click():
 
 def tryConnection(profile):
 	iface.connect(profile)
-	time.sleep(3)
+	time.sleep(6)
 	if not iface.status() == const.IFACE_CONNECTED:
 		tryConnection(profile)
 
-def openWifi():
-	mouse.position = (1468, 18)
-	time.sleep(0.2)
-	click()
+def connectWifi():
+	profile = pywifi.Profile()
+	profile.ssid = wifi_name
+	profile.auth = const.AUTH_ALG_OPEN
+	profile.akm.append(const.AKM_TYPE_WPA2PSK)
+	profile.cipher = const.CIPHER_TYPE_CCMP
+	profile.key = wifi_pass
+	iface.remove_all_network_profiles()
+	tmp_profile = iface.add_network_profile(profile)
+	tryConnection(tmp_profile)
 
 def pray():
 	for num in range (1, 6):
@@ -92,12 +104,14 @@ def collect():
 	mouse.position = confirm_pos #确定按钮 可能会变
 	time.sleep(0.2)
 	click()
-	time.sleep(0.2)
-
-	thread = threading.Thread(target=collectActionThread)
-	thread.start()
+	time.sleep(0.1)
 
 	iface.disconnect()
+	time.sleep(0.2)
+	
+	thread = threading.Thread(target=collectActionThread)
+	thread.start()
+	
 	#profile = pywifi.Profile()
 	#profile.ssid = 'bdsoft1104-AP'
 	#profile.auth = const.AUTH_ALG_OPEN
@@ -120,30 +134,22 @@ def collect():
 	'''
 	
 def collectActionThread():
-	time.sleep(0.4)
+	time.sleep(0.2)
 	mouse.position = open_pos #宝箱开启按钮 可能会变
 	time.sleep(0.2)
-	for num in range (1, 75):
+	for num in range (1, 60):
 		click()
-		time.sleep(0.08)
+		time.sleep(0.1)
 	time.sleep(0.2)
 	#mouse.position = (1477, 10) #点击右上角wifi图标
 	#time.sleep(0.2) #点击右上角wifi图标
 	#click() #点击右上角wifi图标
 	#time.sleep(0.2) #点击右上角wifi图标
 	mouse.position = confirm_pos #确定按钮 可能会变
-	time.sleep(1)
+	time.sleep(0.5)
 
 	iface.disconnect()
-	profile = pywifi.Profile()
-	profile.ssid = wifi_name
-	profile.auth = const.AUTH_ALG_OPEN
-	profile.akm.append(const.AKM_TYPE_WPA2PSK)
-	profile.cipher = const.CIPHER_TYPE_CCMP
-	profile.key = wifi_pass
-	iface.remove_all_network_profiles()
-	tmp_profile = iface.add_network_profile(profile)
-	tryConnection(tmp_profile)
+	connectWifi()
 
 def reopen():
 	mouse.position = confirm_pos #确定按钮 可能会变
@@ -166,6 +172,8 @@ def fightBoss():
 	mouse.position = current
 
 def restartGuild():	
+	connectWifi()
+	time.sleep(1)
 	mouse.position = refresh_pos
 	time.sleep(1)
 	click()
@@ -201,6 +209,21 @@ def compareImg(a, b):
 def test():
 	#im = ImageGrab.grab(bbox=(566,817,593,829))
 	#im.save("test.png")
+	#rgb = PIL.ImageGrab.grab().load()[2042,656]
+	#print(rgb)
+	for i in range(125):
+		time.sleep(0.4)
+		with mss() as sct:
+			monitor = sct.monitors[1]
+			pixel = sct.grab((1017, 326, 1018, 327)).pixels[0][0]
+			print(pixel)
+			#mss.tools.to_png(im.rgb, im.size, output="testscreenshot.png")
+			#rgb = Image.frombytes('RGB', sct_img.size, sct_img.bgra, 'raw', 'BGRX')
+			#print(rgb[100, 100])
+		#rgb = PIL.ImageGrab.grab().load()[2042,656]
+		
+	#print(PIL.ImageGrab.grab().size)
+	print('finish')
 	return
 
 def autoCollect():
@@ -212,12 +235,12 @@ def autoCollectThread():
 	auto_count = 0
 	for i in range(195):
 		collect()
-		time.sleep(5)
+		time.sleep(11) #collect中会开启单独的autoCollect线程，那个线程大概会执行10s，所以这里等待10s以上再进行下一步
 		detectFinish()
 		#mouse.position = confirm_pos #delay for wifi panel close
 		#time.sleep(0.2) #delay for wifi panel close
 		#click() #delay for wifi panel close
-		time.sleep(2)
+		time.sleep(3)
 		auto_count = auto_count + 1
 		print(auto_count)
 		if auto_count == 195:
@@ -231,14 +254,24 @@ def autoCollectThread():
 	return
 
 def detectFinish():
-	for i in range(20):
-		im = ImageGrab.grab(bbox=(847,887,947,919))
-		im.save("confirmtemp.png")
-		confirmtemp = plt.imread("confirmtemp.png")
-		result = compareImg(confirmtemp, confirm_target)
-		time.sleep(3)
-		if result:
+	#for i in range(20):
+	#	im = ImageGrab.grab(bbox=confirm_bbox)
+	#	im.save("confirmtemp.png")
+	#	confirmtemp = plt.imread("confirmtemp.png")
+	#	result = compareImg(confirmtemp, confirm_target)
+	#	time.sleep(3)
+	#	if result:
+	#		break
+	#finish = False
+	for i in range(125):
+		time.sleep(0.4)
+		with mss() as sct:
+			monitor = sct.monitors[1]
+			pixel = sct.grab((1017, 326, 1018, 327)).pixels[0][0] #截取一个2x2的像素，取第1个点
+		if pixel != (117, 71, 73):
+			time.sleep(4)
 			break
+
 
 def detectReady():
 	loading = True
@@ -250,7 +283,7 @@ def detectReady():
 		reopen()
 		time.sleep(2)
 		for i in range(10):
-			im = ImageGrab.grab(bbox=(566,817,593,829))
+			im = ImageGrab.grab(bbox=open_bbox)
 			im.save("opentemp.png")
 			opentemp = plt.imread("opentemp.png")
 			result = compareImg(opentemp, open_target)
