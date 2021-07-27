@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import PIL.ImageGrab
 from mss import mss
 from PIL import Image
+import os
 
 mouse = Controller()
 wifi = pywifi.PyWiFi()
@@ -36,6 +37,9 @@ game_close_pos = (270, 158)
 
 confirm_bbox = (847,887,947,919)
 open_bbox = (566,817,593,829)
+
+wifi_icon_pos = (1503, 13)
+wifi_toggle_pos = (1748, 47)
 
 #wifi_name = "bdsoft-cobot"
 #wifi_pass = "78936479"
@@ -73,9 +77,17 @@ def click():
 	#mouse.click(Button.left)
 
 def tryConnection(profile):
-	iface.connect(profile)
-	time.sleep(6)
+	print('try con')
+	try:
+		iface.connect(profile)
+		print('iface connected')
+	except:
+		print('iface connect error, connection attempt fail')
+	#iface.connect(profile)
+	time.sleep(3)
+	print('compare')
 	if not iface.status() == const.IFACE_CONNECTED:
+		print('not equal')
 		tryConnection(profile)
 
 def connectWifi():
@@ -88,6 +100,7 @@ def connectWifi():
 	iface.remove_all_network_profiles()
 	tmp_profile = iface.add_network_profile(profile)
 	tryConnection(tmp_profile)
+	print('con success')
 
 def pray():
 	for num in range (1, 6):
@@ -106,8 +119,9 @@ def collect():
 	click()
 	time.sleep(0.1)
 
-	iface.disconnect()
-	time.sleep(0.2)
+	os.system("networksetup -setairportpower airport off") #直接关闭wifi
+	#iface.disconnect()
+	time.sleep(0.6)
 	
 	thread = threading.Thread(target=collectActionThread)
 	thread.start()
@@ -147,9 +161,10 @@ def collectActionThread():
 	#time.sleep(0.2) #点击右上角wifi图标
 	mouse.position = confirm_pos #确定按钮 可能会变
 	time.sleep(0.5)
-
-	iface.disconnect()
+	os.system("networksetup -setairportpower airport on") #重新打开wifi
+	time.sleep(0.3)
 	connectWifi()
+	#iface.disconnect()
 
 def reopen():
 	mouse.position = confirm_pos #确定按钮 可能会变
@@ -172,8 +187,11 @@ def fightBoss():
 	mouse.position = current
 
 def restartGuild():	
+	print('====================restart guild!======================')
+	os.system("networksetup -setairportpower airport on") #防止wifi因意外情况被关闭
+	time.sleep(0.3)
 	connectWifi()
-	time.sleep(1)
+	time.sleep(8)
 	mouse.position = refresh_pos
 	time.sleep(1)
 	click()
@@ -205,25 +223,23 @@ def compareImg(a, b):
 	else:
 		return False
 
-
 def test():
 	#im = ImageGrab.grab(bbox=(566,817,593,829))
 	#im.save("test.png")
 	#rgb = PIL.ImageGrab.grab().load()[2042,656]
 	#print(rgb)
-	for i in range(125):
-		time.sleep(0.4)
-		with mss() as sct:
-			monitor = sct.monitors[1]
-			pixel = sct.grab((1017, 326, 1018, 327)).pixels[0][0]
-			print(pixel)
+	#for i in range(125):
+	#	time.sleep(0.4)
+	#	with mss() as sct:
+	#		monitor = sct.monitors[1]
+	#		pixel = sct.grab((1017, 326, 1018, 327)).pixels[0][0]
+	#		print(pixel)
 			#mss.tools.to_png(im.rgb, im.size, output="testscreenshot.png")
 			#rgb = Image.frombytes('RGB', sct_img.size, sct_img.bgra, 'raw', 'BGRX')
 			#print(rgb[100, 100])
 		#rgb = PIL.ImageGrab.grab().load()[2042,656]
 		
 	#print(PIL.ImageGrab.grab().size)
-	print('finish')
 	return
 
 def autoCollect():
@@ -231,11 +247,12 @@ def autoCollect():
 	thread.start()
 
 def autoCollectThread():
+	print('auto collect start in 10s')
 	time.sleep(10)
 	auto_count = 0
 	for i in range(195):
 		collect()
-		time.sleep(11) #collect中会开启单独的autoCollect线程，那个线程大概会执行10s，所以这里等待10s以上再进行下一步
+		time.sleep(11) #collect方法里的collectActionThread线程大概会执行10s，所以这里等待10s以上再进行下一步
 		detectFinish()
 		#mouse.position = confirm_pos #delay for wifi panel close
 		#time.sleep(0.2) #delay for wifi panel close
@@ -263,7 +280,7 @@ def detectFinish():
 	#	if result:
 	#		break
 	#finish = False
-	for i in range(125):
+	for i in range(150):
 		time.sleep(0.4)
 		with mss() as sct:
 			monitor = sct.monitors[1]

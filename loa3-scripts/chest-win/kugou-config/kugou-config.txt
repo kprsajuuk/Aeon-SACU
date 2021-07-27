@@ -1,0 +1,57 @@
+test_input = (10, 100)
+mouse_blank_pos = (731, 663)
+
+account1_pos = (141, 755) #ynumikol
+account2_pos = (309, 755) #126
+account3_pos = (467, 755) #163
+
+tab0_pos = (388, 5)
+tab1_pos = (539, 5)
+tab2_pos = (729, 5)
+tab3_pos = (919, 5)
+
+tab1_close_pos = (652, 14)
+tab2_close_pos = (839, 14)
+tab3_close_pos = (1027, 14)
+
+tab_refresh_pos = (114, 43)
+close_warning_pos = (984, 265)
+
+guild_icon_pos = (1079, 713)
+guild_contribute_pos = (811, 305)
+guild_contribute_close_pos = (1063, 167)
+guild_close_pos = (1121, 163)
+event_close_pos = (1120, 163)
+boss_icon_pos = (1029, 162)
+boss_fight_pos = (753, 668)
+
+contribute_btn_pos = (735, 626)
+contribute_confirm_pos = (686, 519)
+
+list = [(269, 108), (377, 108), (493, 108), (596, 108)]
+list = [(269, 134), (377, 134), (493, 134), (596, 134)]
+list = [(269, 166), (377, 166), (493, 166), (596, 166)]
+
+extra_pos = (108, 137)
+extra_pos = (108, 163)
+
+
+
+
+def detectWarningResult():
+	im = ImageGrab.grab(bbox=(979,261,989,270))
+
+def detectPrayResult():
+	im = ImageGrab.grab(bbox=(697,617,708,640))
+
+def detectBossIconResult():
+	im = ImageGrab.grab(bbox=(1030,164,1044,176))
+
+def detectBossFinishResult():
+	im = ImageGrab.grab(bbox=(734,656,768,678))
+
+def detectChestAreaResult():
+	im = ImageGrab.grab(bbox=(679,393,809,475))	
+
+def detectEventCloseResult():
+	im = ImageGrab.grab(bbox=(1111,154,1127,169))		
