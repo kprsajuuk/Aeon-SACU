@@ -883,7 +883,6 @@ function Site.GetFarmLaneTarget( creepList )
 	local nAllyCreeps = bot:GetNearbyLaneCreeps( 1000, false )
 
 	if botName ~= "npc_dota_hero_medusa"
-	   and botName ~= "npc_dota_hero_razor"
 	   and #nAllyCreeps > 0
 	then
 		targetCreep = Site.GetNearestCreep( creepList )

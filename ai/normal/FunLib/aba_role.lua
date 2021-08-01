@@ -11,7 +11,7 @@ local X = {}
 
 local sBotVersion = "New"
 -- local sBotVersion = "Mid"
-local sVersionDate = " 7.29, 2021/04/25"
+local sVersionDate = " 7.29, 2021/05/31"
 
 function X.GetBotVersion()
 	return sBotVersion, sVersionDate
@@ -1950,6 +1950,7 @@ end
 
 X['replyMemberID'] = nil
 function X.GetReplyMemberID()
+
 	if X['replyMemberID'] ~= nil then return X['replyMemberID'] end
 
 	local tMemberIDList = GetTeamPlayers( GetTeam() )
@@ -1964,7 +1965,7 @@ function X.GetReplyMemberID()
 		end
 	end
 
-	X['replyMemberID'] = 3
+	X['replyMemberID'] = tMemberIDList[RandomInt( nHumanCount + 1, nMemberCount )]
 
 	return X['replyMemberID']
 
@@ -2145,7 +2146,6 @@ function X.IsABAHero()
 		["npc_dota_hero_shadow_shaman"] = true,
 		["npc_dota_hero_silencer"] = true,
 		["npc_dota_hero_skeleton_king"] = true,
-		["npc_dota_hero_doom_bringer"] = true,
 		["npc_dota_hero_skywrath_mage"] = true,
 		["npc_dota_hero_sniper"] = true,
 		["npc_dota_hero_sven"] = true,
@@ -2172,6 +2172,40 @@ function X.IsABAHero()
 
 end
 
+local sPastKeyIndex = {
+
+
+	["AZR2007MM1EAKGFSA"] = true,
+	["AZR20086S9UYN8F5P"] = true,
+	["AZR20D3SNZPHTPUPP"] = true,
+	["AZR20YNYHCYVC8F9H"] = true,
+
+
+	["AJN2007MHIEC3OVVC"] = true,
+	["AJN20083UOBLU94H8"] = true,
+	["AJN20D3SEBXUVW5X8"] = true,
+	["AJN20YNYZ8ER7HXEE"] = true,
+
+
+	["SJN2007M9PQX15LXP"] = true,
+	["SJN2008AWD3ATBVDA"] = true,
+	["SJN20D3SBYH1RZ0U1"] = true,
+	["SJN20YNYGFS8ER78H"] = true,
+
+
+}
+
+
+local sWillPastKeyIndex = {
+
+
+	["AZR20YNYHCYVC8F9H"] = true,
+	["AJN20YNYZ8ER7HXEE"] = true,
+	["SJN20YNYGFS8ER78H"] = true,
+
+
+}
+
 
 local sKeyTypeIndex = {
 
@@ -2179,29 +2213,46 @@ local sKeyTypeIndex = {
 	["AZR20086S9UYN8F5P"] = 'aba_lineup_202008',
 	["AZR20D3SNZPHTPUPP"] = 'aba_lineup_2020d3',
 	["AZR20YNYHCYVC8F9H"] = 'aba_lineup_2020',
+	["AZR2105M8RY7NYO1J"] = 'aba_lineup_202105',
+	["AZR2106BL2R7YBFIQ"] = 'aba_lineup_202106',
+	["AZR21YNQKFZV6OV0Q"] = 'aba_lineup_2021',
 	
 	["AJN2007MHIEC3OVVC"] = 'aba_all_202007',
 	["AJN20083UOBLU94H8"] = 'aba_all_202008',
 	["AJN20D3SEBXUVW5X8"] = 'aba_all_2020d3',
 	["AJN20YNYZ8ER7HXEE"] = 'aba_all_2020',
+	["AJN2105RQO9YTHQAF"] = 'aba_all_202105',
+	["AJN2106LAPDIIE0VA"] = 'aba_all_202106',
+	["AJN21YNHNMZNKWEIT"] = 'aba_all_2021',
 	
 	["SJN2007M9PQX15LXP"] = 'sa_all_202007',
 	["SJN2008AWD3ATBVDA"] = 'sa_all_202008',
 	["SJN20D3SBYH1RZ0U1"] = 'sa_all_2020d3',
 	["SJN20YNYGFS8ER78H"] = 'sa_all_2020',
+	["SJN2105R1TNCLH1PQ"] = 'sa_all_202105',
+	["SJN2106HVIDC4WWLL"] = 'sa_all_202106',
+	["SJN21YN5SZUPZ9QSH"] = 'sa_all_2021',
 
 }
 
 local nKeyLVIndex = {
 
-	["AZR20D3SNZPHTPUPP"] = 2,
 	["AZR20YNYHCYVC8F9H"] = 2,
+	["AZR2105M8RY7NYO1J"] = 2,
+	["AZR2106BL2R7YBFIQ"] = 2,
+	["AZR21YNQKFZV6OV0Q"] = 2,
 	
-	["AJN20D3SEBXUVW5X8"] = 4,
+	
 	["AJN20YNYZ8ER7HXEE"] = 4,
+	["AJN2105RQO9YTHQAF"] = 4,
+	["AJN2106LAPDIIE0VA"] = 4,
+	["AJN21YNHNMZNKWEIT"] = 4,
 	
-	["SJN20D3SBYH1RZ0U1"] = 6,
+	
 	["SJN20YNYGFS8ER78H"] = 6,
+	["SJN2105R1TNCLH1PQ"] = 6,
+	["SJN2106HVIDC4WWLL"] = 6,
+	["SJN21YN5SZUPZ9QSH"] = 6,
 
 }
 
@@ -2278,6 +2329,18 @@ function X.GetUserType()
 	
 	return 'no_key'
 	
+end
+
+function X.IsPastKey()
+
+	return sPastKeyIndex[X["sUserKey"]] == true
+
+end
+
+
+function X.IsWillPastKey()
+
+	return sWillPastKeyIndex[X["sUserKey"]] == true
 end
 
 

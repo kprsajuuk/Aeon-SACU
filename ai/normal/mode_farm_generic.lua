@@ -72,28 +72,30 @@ local sNoticeList = {
 	
 	[1] = "创建本地主机房间设置AI即可与好友一起游戏",
 	[2] = "重复上局的对抗阵容, 某宝搜索天地星见方法.",
-	[3] = "可以为AI设置多倍经验金钱,快来交流群里看看.",
-	[4] = "赞助冠名或吐槽建议,请联系:dota2jmz@163.c om",
+	[3] = "可以设置多倍经验金钱, 某宝搜索天地星看一看.",
+	[4] = "赞助冠名或吐槽建议,请联系:dota2jmz@163.匚om",
 	[5] = "寻找AI玩家一起游戏, 千人交流群等着你过来.",
 	[6] = "跟车队一起玩超疯狂AI, 等你加群体验游戏.",
 	[7] = "可以和我们公屏聊天互动,武斗文斗同时进行.",
-	[8] = "谢谢各位玩家朋友的支持,AI因你而持续更新.",	
+	[8] = "感谢各位玩家朋友的支持,AI因你而持续更新.",	
 	[9] = "更多自定义功能, 某宝搜索天地星AI就能看到.",
 	[10] = "某宝搜索天地星AI, 激活特色锦囊模式.",	
 	[11] = "某宝搜索新星AI工作.室, 提前体验更多AI英雄.",
-	[12] = "可以指定AI队友名字分路出装, 某宝即将上架.",
-	[13] = "我们正处于各种困境之中, 请帮我们出谋划策.",
+	[12] = "可以指定AI队友名字分路出装, 某宝已经上架.",
+	[13] = "激活天地星AI特色锦囊模式, 某宝已经上架.",
+	[14] = "可以指定AI对手名字分路出装, 某宝已经上架.",
+	[15] = "我们正处于各种困境之中, 请帮我们出谋划策.",
 	
 }
 
 
 function GetDesire()	
 
-	--Set PushNotice Delay 
+	--设置夜魇方公告延迟 
 	if not bPushNoticeDone
 	   and DotaTime() < 0
 	   and GetTeam() == TEAM_DIRE
-	   and bot == GetTeamMember(1)
+	   and bot == GetTeamMember(5)
 	   and GetTeamPlayers(GetOpposingTeam())[5] ~= nil
 	   and IsPlayerBot( GetTeamPlayers(GetOpposingTeam())[5])
 	   and nPushNoticeTime == nil
@@ -102,7 +104,7 @@ function GetDesire()
 		bAllNotice = false
 	end
 	
-	--PushNotice
+	--播放开局公告
 	if not bPushNoticeDone
 	   and DotaTime() < 0
 	   and bot:GetGold() < 300 
@@ -112,41 +114,66 @@ function GetDesire()
 			 or nPushNoticeTime + 2.0 < DotaTime())
 	then
 		local firstMessage = "(QQ交流群:571170817)天地星AI: "..sBotVersion..sVersionDate		
+		local secondMessage = firstMessage
 		
+
 		if J.Role.GetKeyType() ~= 0
 		then
 			local sKeyType = J.Role.GetKeyType()
 			local sUserName = J.Role.GetUserName()
-			firstMessage = J.Chat.GetLocalWord(sKeyType)..sVersionDate
+			-- firstMessage = J.Chat.GetLocalWord(sKeyType)..sVersionDate
 			if sUserName ~= "" and sUserName ~= " " and sUserName ~= "   " and sUserName ~= nil  
 			then
 				firstMessage = sUserName
 			end
 		end	
-		firstMessage = "准备好做我的性奴了吗？"
+		
 		bot:ActionImmediate_Chat( firstMessage, true)
+		
+		if firstMessage ~= secondMessage and GetTeamMember( 1 ):IsBot()
+		then
+			local sKeyType = J.Role.GetKeyType()
+			local sUserName = J.Role.GetUserName()
+			secondMessage = J.Chat.GetLocalWord(sKeyType)..sVersionDate
+			bot:ActionImmediate_Chat( secondMessage, true)
+		end
 		
 		if not J.Role.IsUserMode()
 		then
 			if bAllNotice
 			then
-				bot:ActionImmediate_Chat("银雪女神？我看只是一只母狗而已。你的骚逼是不是已经饥渴难耐了？",true);
+				bot:ActionImmediate_Chat("AI开车群:903256599, 更多自定义功能, 某宝搜索天地星AI可见.",true);
 			else
 				local sNoticeMessage = sNoticeList[RandomInt(1,#sNoticeList)]
 				bot:ActionImmediate_Chat(sNoticeMessage,true);
 			end
-		end
+		end		
 		
+		--夜魇方推送提示
+		if GetTeam() == TEAM_DIRE
+		then
+			if J.Role.IsWillPastKey()
+			then
+				bot:ActionImmediate_Chat("当前使用的锦囊包即将停止更新修复, 感谢支持!",true);
+			elseif J.Role.IsPastKey()
+			then
+				bot:ActionImmediate_Chat("当前使用的锦囊包已经停止更新修复, 感谢你以往的支持!",true);			
+			end		
+		end	
+
 		X.SetPushBonus( bot )
 		
 		bPushNoticeDone = true
 	end
+	
+	
 	
 	if DotaTime() < 10
 		and nLobbyNoticeTime < DotaTime() - 15.0
 		and bot == GetTeamMember(5)
 		and GetTeam() == TEAM_DIRE
 		and not J.Role["bLobbyGame"]
+		and GetGameMode() == GAMEMODE_AP
 	then
 		bot:ActionImmediate_Chat("提示:由于没有通过创建比赛房间来使用AI, 大部分英雄会失效(客户端的BUG), 请不要直接在主界面开始机器人练习.", true);
 		nLobbyNoticeTime = DotaTime()
@@ -202,7 +229,7 @@ function GetDesire()
 		
 	if not J.Role.IsCampRefreshDone()
 	   and J.Role.GetAvailableCampCount() < J.Role.GetCampCount()
-	   and ( DotaTime() > 30 and  sec > 0 and sec < 2 )  
+	   and ( DotaTime() > 20 and  sec > 0 and sec < 2 )  
 	then
 		J.Role['availableCampTable'], J.Role['campCount'] = J.Site.RefreshCamp(bot);
 		J.Role['hasRefreshDone'] = true;
@@ -239,7 +266,7 @@ function GetDesire()
 	
 	local nTeamFightLocation = J.GetTeamFightLocation(bot);
 	if nTeamFightLocation ~= nil 
-	   and (not beVeryHighFarmer or bot:GetLevel() >= 20)
+	   and ( not beVeryHighFarmer or bot:GetLevel() >= 20 )
 	   and GetUnitToLocationDistance(bot,nTeamFightLocation) < 2800
 	then
 		return BOT_MODE_DESIRE_NONE;
@@ -288,9 +315,9 @@ function GetDesire()
 			J.Role['sayRate'] = true;
 			if RandomInt(1,6) < 3 
 			then
-				bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				bot:ActionImmediate_Chat("我们预估获胜的概率低于百分之一,甘拜下风! Well played! ",true);
 			else
-				bot:ActionImmediate_Chat("我一定会干翻你，肏穿你！",true);
+				bot:ActionImmediate_Chat("We estimate the probability of丶winning to be below 1%.Well played!",true);
 			end
 		end
 		if allyKills > enemyKills + nWinCount and J.Role.NotSayRate() 
@@ -298,9 +325,9 @@ function GetDesire()
 		    J.Role['sayRate'] = true;
 			if RandomInt(1,6) < 3 
 			then
-				bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				bot:ActionImmediate_Chat("我们预估团战获胜的概率在百分之九十以上。",true);
 			else
-				bot:ActionImmediate_Chat("哈哈，银雪姐妹马上就要改名淫穴母狗了，哈哈哈",true);
+				bot:ActionImmediate_Chat("We estimate the probability of丶winning to above 90%.",true);
 			end
 		end
 	
@@ -466,7 +493,7 @@ function Think()
 	then return end
 	
 	if runMode then
-		if not bot:IsInvisible() and bot:GetLevel() > 14
+		if not bot:IsInvisible() and bot:GetLevel() >= 15
 		then
 			local botAttackRange = bot:GetAttackRange();
 			if botAttackRange > 1400 then botAttackRange = 1400 end;
@@ -496,7 +523,7 @@ function Think()
 			end			
 		end
 	
-		if J.IsInAllyArea(bot)
+		if J.IsInAllyArea(bot) or J.GetDistanceFromEnemyFountain(bot) < 2600
 		then	
 			if bot:GetTeam() == TEAM_RADIANT
 			then
@@ -548,7 +575,7 @@ function Think()
 					if bot:FindItemSlot("item_quelling_blade") > 0
 						or bot:FindItemSlot("item_bfury") > 0
 					then
-						botDamage = botDamage + 18;
+						botDamage = botDamage + 13;
 					end
 					
 					if not J.CanKillTarget(farmTarget, botDamage * nDamageReduce, DAMAGE_TYPE_PHYSICAL)
@@ -1262,20 +1289,21 @@ function X.SetPushBonus( bot )
 		return
 	end
 	
-	local bonusNoticeTable = {
+	local bonusNoticeTable = {	
 		["7.29Y3"] = "大神, 当前挑战的是三倍金钱经验夜魇AI.",
 		["7.29Y2"] = "勇士, 当前挑战的是双倍金钱经验夜魇AI.",
 		["7.29T2"] = "勇士, 当前挑战的是双倍金钱经验天辉AI.",
-		["7.29Y1.5"] = "少年, 当前挑战的是1.5倍金钱经验夜魇AI.",		
+		["7.29Y1.5"] = "少年, 当前挑战的是1.5倍金钱经验夜魇AI.",	
+		["7.29Y2E4M"] = "大佬, 当前挑战的是双倍经验四倍金钱夜魇AI.",	
 	}
 	
 	if bonusNoticeTable[bonusType] ~= nil
 	then
 		bot:ActionImmediate_Chat( bonusNoticeTable[bonusType], true )
-		return
+	else
+		bot:ActionImmediate_Chat( "你当前挑战的是未知倍数夜魇AI.", true )
 	end
-
-
+	
 end
 
 -- dota2jmz@163.com QQ:2462331592.

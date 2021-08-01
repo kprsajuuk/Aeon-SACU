@@ -104,7 +104,9 @@ function GetDesire()
 		end	
 		
 		--交换奶酪格子
-		if 	DotaTime() >= cheeseCheck + 2.0 and bot:GetActiveMode() ~= BOT_MODE_WARD then
+		if 	DotaTime() >= cheeseCheck + 2.0 and false
+			and bot:GetActiveMode() ~= BOT_MODE_WARD 
+		then
 			local cSlot = bot:FindItemSlot('item_cheese');
 			if bot:GetItemSlotType(cSlot) == ITEM_SLOT_TYPE_BACKPACK then
 				local lessValItem = J.Item.GetMainInvLessValItemSlot(bot);
@@ -116,7 +118,9 @@ function GetDesire()
 		end
 		
 		--交换刷新格子
-		if 	DotaTime() >= refShardCheck + 2.0 and bot:GetActiveMode() ~= BOT_MODE_WARD then
+		if 	DotaTime() >= refShardCheck + 2.0 and false 
+			and bot:GetActiveMode() ~= BOT_MODE_WARD 
+		then
 			local rSlot = bot:FindItemSlot('item_refresher_shard');
 			if bot:GetItemSlotType(rSlot) == ITEM_SLOT_TYPE_BACKPACK then
 				local lessValItem = J.Item.GetMainInvLessValItemSlot(bot);
@@ -318,8 +322,10 @@ function X.SupportFindTarget( bot )
 	end
 	
 	
-	local enemyCourier = X.GetEnemyCourier(bot, nAttackRange + botLV * 2 + 30);
-	if enemyCourier ~= nil
+	local enemyCourier = X.GetEnemyCourier(bot, nAttackRange + botLV * 2 + 20 );
+	if enemyCourier ~= nil 
+		and not enemyCourier:IsAttackImmune()
+		and not enemyCourier:IsInvulnerable()
 	then
 		return enemyCourier,BOT_MODE_DESIRE_ABSOLUTE * 1.5; 
 	end		
@@ -338,9 +344,10 @@ function X.SupportFindTarget( bot )
 	end
 		
 	
-	local attackDamage = botBAD -1;
+	local attackDamage = botBAD - 1;
 	if  IsModeSuitHit
-		and ( botHP > 0.5 or not bot:WasRecentlyDamagedByAnyHero(2.0))
+		and not X.HasHumanAlly( bot )
+		and ( botHP > 0.5 or not bot:WasRecentlyDamagedByAnyHero(2.0) )
 	then
 		local nBonusRange = 400;
 		if botLV > 12 then nBonusRange = 300; end
@@ -380,7 +387,7 @@ function X.SupportFindTarget( bot )
 	end
 	
 	
-	local denyDamage = botAD + 1
+	local denyDamage = botAD + 3
 	local nNearbyEnemyHeroes = bot:GetNearbyHeroes(750,true,BOT_MODE_NONE); -----------*************
 	if  IsModeSuitHit 
 		and bot:GetLevel() <= 8
@@ -631,6 +638,8 @@ function X.CarryFindTarget( bot )
 	
 	local enemyCourier = X.GetEnemyCourier(bot, nAttackRange + botLV * 2 + 30);
 	if enemyCourier ~= nil
+		and not enemyCourier:IsAttackImmune()
+		and not enemyCourier:IsInvulnerable()
 	then
 		return enemyCourier,BOT_MODE_DESIRE_ABSOLUTE * 1.5; 
 	end		
@@ -679,6 +688,7 @@ function X.CarryFindTarget( bot )
 	
 	local attackDamage = botBAD;
 	if  IsModeSuitHit
+		and not X.HasHumanAlly( bot )
 		and ( botHP > 0.5 or not bot:WasRecentlyDamagedByAnyHero(2.0))
 	then
 		local nBonusRange = 430;
@@ -723,7 +733,7 @@ function X.CarryFindTarget( bot )
 	--特殊关注远程兵
 	
 	
-	local denyDamage = botAD + 1.2
+	local denyDamage = botAD + 3
 	local nNearbyEnemyHeroes = bot:GetNearbyHeroes(650,true,BOT_MODE_NONE);
 	if  IsModeSuitHit 
 		and ( botHP > 0.38 or not bot:WasRecentlyDamagedByAnyHero(3.0))
@@ -1058,6 +1068,8 @@ function X.GetEnemyCourier(bot,nRadius)
 	
 	if GetGameMode() == 23 then return nil end
 	
+	if J.GetDistanceFromEnemyFountain( bot ) < 1400 then return nil end
+	
 	if DotaTime() > lastFindTime + courierFindCD
 	then
 		lastFindTime = DotaTime();
@@ -1071,6 +1083,7 @@ function X.GetEnemyCourier(bot,nRadius)
 				  and GetUnitToUnitDistance(bot,u) <= nRadius
 				  and not u:IsInvulnerable()
 				  and not u:IsAttackImmune()
+				  and not u:HasModifier( 'modifier_fountain_aura' )
 			   then
 				   return u;
 			   end
@@ -1147,17 +1160,8 @@ end
 
 function X.GetSpecialDamageBonus(nDamage,nCreep,bot)
 
-	if bot:GetUnitName() == "npc_dota_hero_antimage"
-	   and bot:GetLevel() >= 2
-	   and nCreep:GetTeam() ~= bot:GetTeam()
-	   and J.IsKeyWordUnit("ranged",nCreep)
-	then
-		nDamage = nDamage + 14;
-	end
-
-
-	
-	return nDamage;
+		
+	return 0
 end
 
 
@@ -1400,6 +1404,8 @@ function X.IsModeSuitToHitCreep(bot)
 	
 	local botMode = bot:GetActiveMode();
 	local nEnemyHeroes = J.GetEnemyList(bot,750)
+	
+	
 	if #nEnemyHeroes >= 3 
 	   or (nEnemyHeroes[1] ~= nil and nEnemyHeroes[1]:GetLevel() >= 8 )
 	then
@@ -1409,8 +1415,7 @@ function X.IsModeSuitToHitCreep(bot)
 	if bot:HasModifier("modifier_axe_battle_hunger")
 	then
 		local nEnemyLaneCreepList = bot:GetNearbyLaneCreeps( bot:GetAttackRange() + 180, true )
-		if #nEnemyLaneCreepList > 0 
-		then return true end
+		if #nEnemyLaneCreepList > 0 then return true end
 	end
 	
 	if bot:GetLevel() <= 3
@@ -1735,7 +1740,6 @@ function X.ShouldAttackTowerCreep(bot)
 		end
 	end
 	
-	--试着拉野
 	
 	return 0,nil;
 end
@@ -1798,4 +1802,37 @@ function X.ShouldNotRetreat(bot)
 	
 	return false;
 end
+
+local bHumanAlly = nil
+function X.HasHumanAlly( bot )
+
+	if bHumanAlly == false then return false end
+
+	if bHumanAlly == nil 
+	then
+		local teamPlayerIDList = GetTeamPlayers( GetTeam() )
+		for i = 1, #teamPlayerIDList
+		do 
+			if not IsPlayerBot( teamPlayerIDList[i] )
+			then
+				bHumanAlly = true
+				break
+			end
+		end	
+		if bHumanAlly ~= true then bHumanAlly = false end		
+	end
+	
+	local allyHeroList = bot:GetNearbyHeroes( 900, false, BOT_MODE_NONE )
+	for _, npcAlly in pairs( allyHeroList )
+	do 
+		if not npcAlly:IsBot()
+		then
+			return true
+		end	
+	end
+	
+	return false 
+		
+end
+
 -- dota2jmz@163.com QQ:2462331592.

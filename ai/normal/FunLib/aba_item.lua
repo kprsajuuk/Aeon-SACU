@@ -747,7 +747,7 @@ Item['item_mage_slayer']	= GetItemComponents( 'item_mage_slayer' )[1]
 
 Item['item_eternal_shroud']	= GetItemComponents( 'item_eternal_shroud' )[1]
 
-Item['item_helm_of_the_dominator_2']	= GetItemComponents( 'item_helm_of_the_dominator_2' )[1]
+Item['item_helm_of_the_overlord']	= GetItemComponents( 'item_helm_of_the_overlord' )[1]
 
 Item['item_overwhelming_blink']	= GetItemComponents( 'item_overwhelming_blink' )[1]
 
@@ -866,7 +866,7 @@ Item['item_melee_carry_outfit']			= { 'item_tango', 'item_flask', 'item_quelling
 
 Item['item_phantom_assassin_outfit']	= { 'item_tango', 'item_flask', 'item_quelling_blade', 'item_double_branches', 'item_circlet', 'item_magic_stick', 'item_slippers', 'item_recipe_wraith_band', 'item_flask', 'item_recipe_magic_wand', 'item_power_treads_agi', 'item_flask', 'item_blight_stone' }
 
-Item['item_juggernaut_outfit']			= { 'item_tango', 'item_flask', 'item_quelling_blade', 'item_double_branches', 'item_circlet', 'item_magic_stick', 'item_slippers', 'item_recipe_wraith_band', 'item_flask', 'item_recipe_magic_wand', 'item_phase_boots', }
+Item['item_juggernaut_outfit']			= { 'item_tango', 'item_flask', 'item_quelling_blade', 'item_double_branches', 'item_circlet', 'item_magic_stick', 'item_slippers', 'item_recipe_wraith_band', 'item_flask', 'item_recipe_magic_wand', 'item_phase_boots', 'item_wraith_band' }
 
 Item['item_huskar_outfit']				= { 'item_tango', 'item_flask', 'item_double_branches', 'item_gauntlets', 'item_circlet', 'item_magic_stick', 'item_recipe_bracer', 'item_boots', 'item_bracer', 'item_recipe_magic_wand', 'item_flask', 'item_blades_of_attack', 'item_chainmail' }
 

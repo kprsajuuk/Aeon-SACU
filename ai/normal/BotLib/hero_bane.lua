@@ -37,6 +37,7 @@ local tOutFitList = {}
 tOutFitList['outfit_carry'] = {
 
 	"item_crystal_maiden_outfit",
+	"item_point_booster",
 	"item_aghanims_shard",
 	"item_ultimate_scepter",
 	"item_shadow_amulet",
@@ -76,11 +77,11 @@ tOutFitList['outfit_priest'] = {
 tOutFitList['outfit_mage'] = {
 
 	"item_mage_outfit",
-	"item_pipe",
-	"item_shadow_amulet",
-	"item_aghanims_shard",
-	"item_ultimate_scepter",
+	"item_ultimate_scepter",	
 	"item_glimmer_cape",
+	"item_pipe",
+	"item_aghanims_shard",
+	--"item_ultimate_scepter",	
 	"item_veil_of_discord",
 	"item_wind_waker",
 	"item_mystic_staff",

@@ -689,6 +689,8 @@ function X.ConsiderE()
 		for _, npcEnemy in pairs( hEnemyList )
 		do
 			if J.IsValidHero( npcEnemy )
+				and npcEnemy:GetUnitName() ~= "npc_dota_hero_chaos_knight"
+				and npcEnemy:GetUnitName() ~= "npc_dota_hero_vengefulspirit"
 				and J.IsInRange( npcEnemy, bot, nCastRange + 300 )
 				and J.IsSuspiciousIllusion( npcEnemy )
 			then

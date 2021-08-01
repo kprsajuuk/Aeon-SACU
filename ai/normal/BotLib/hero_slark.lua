@@ -20,7 +20,7 @@ local tTalentTreeList = {
 						['t25'] = {0, 10},
 						['t20'] = {0, 10},
 						['t15'] = {0, 10},
-						['t10'] = {10, 0},
+						['t10'] = {0, 10},
 }
 
 local tAllAbilityBuildList = {
@@ -36,7 +36,7 @@ local tOutFitList = {}
 tOutFitList['outfit_carry'] = {
 
 	"item_melee_carry_outfit",
-	"item_wraith_band",
+--	"item_wraith_band",
 	"item_yasha",
 	"item_diffusal_blade",
 	"item_broadsword", 
