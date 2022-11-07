@@ -100,8 +100,8 @@ task_list = [l39, l38, l37, l36, l35, l34, l33, l32, l31, l30, l29, l28, l27, l2
 #wifi_name = "PKUSE"
 #wifi_pass = "Bdsoft61137666"
 
-#wifi_name = "sscz_8DE0"
-wifi_name = "sscz_2"
+wifi_name = "sscz_8DE0"
+#wifi_name = "sscz_2"
 wifi_pass = "blackhole"
 
 test_input = (10, 100)
