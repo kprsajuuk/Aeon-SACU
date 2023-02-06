@@ -482,6 +482,13 @@ def tripThread():
 	time.sleep(1)
 	click()
 	time.sleep(3)
+
+	if closeWhenFinished:
+		mouse.position = game_close_pos
+		time.sleep(1)
+		click()
+		time.sleep(10)
+		os._exit(0)
 	return
 
 
