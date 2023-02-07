@@ -119,7 +119,13 @@ def click():
 	mouse.press(Button.left)
 	time.sleep(0.05)
 	mouse.release(Button.left)
-	#mouse.click(Button.left)
+
+def clickPosition(pos, pre_delay=0.2, wait=0.2, post_delay=0.2):
+	time.sleep(pre_delay)
+	mouse.position = pos
+	time.sleep(wait)
+	click()
+	time.sleep(post_delay)
 
 def tryConnection(profile):
 	print('try con start')
@@ -162,29 +168,17 @@ def connectWifi():
 	#mouse.position = confirm_pos
 	time.sleep(0.2)
 	tryConnection(tmp_profile)
-	mouse.position = confirm_pos
-	time.sleep(0.2)
-	click()
-	time.sleep(0.2)
+	clickPosition(confirm_pos)
 	global wifiConnected
 	wifiConnected = True
 
 def pray():
 	for num in range (1, 6):
-		mouse.position = (950, 874)
-		time.sleep(0.2)
-		click()
-		time.sleep(0.6)
-		mouse.position = (884, 737)
-		time.sleep(0.2)
-		click()
-		time.sleep(0.6)
+		clickPosition((950, 874), post_delay=0.6)
+		clickPosition((884, 737),post_delay=0.6)
 
 def collect():
-	mouse.position = confirm_pos #确定按钮 可能会变
-	time.sleep(0.2)
-	click()
-	time.sleep(0.1)
+	clickPosition(confirm_pos)
 
 	os.system("networksetup -setairportpower en0 off") #直接关闭wifi
 	global wifiConnected
@@ -239,23 +233,13 @@ def collectActionThread():
 	#iface.disconnect()
 
 def reopen():
-	mouse.position = confirm_pos #确定按钮 可能会变
-	time.sleep(0.1)
-	click()
-	time.sleep(0.1)
-	mouse.position = close_pos
-	time.sleep(0.2)
-	click()
-	mouse.position = vault_pos
-	time.sleep(1)
-	click()
+	clickPosition(confirm_pos)
+	clickPosition(close_pos)
+	clickPosition(vault_pos, wait=1)
 
 def fightBoss():
 	current = mouse.position
-	mouse.position = boss_pos
-	time.sleep(0.1)
-	click()
-	time.sleep(0.1)
+	clickPosition(boss_pos)
 	mouse.position = current
 
 def restartGuild(restartWifi=True):	
@@ -267,18 +251,9 @@ def restartGuild(restartWifi=True):
 		time.sleep(0.3)
 		connectWifi()
 	time.sleep(8)
-	mouse.position = refresh_pos
-	time.sleep(1)
-	click()
-	time.sleep(50)
-	mouse.position = scroll_icon
-	time.sleep(1)
-	click()
-	time.sleep(2)
-	mouse.position = guild_icon
-	time.sleep(1)
-	click()
-	time.sleep(2)
+	clickPosition(refresh_pos, wait=1, post_delay=50)
+	clickPosition(scroll_icon, wait=1, post_delay=2)
+	clickPosition(guild_icon, wait=1, post_delay=2)
 
 def compareImg(a, b):
 	if (a.shape[0] != b.shape[0]) or (a.shape[1] != b.shape[1]) or (a.shape[2] != b.shape[2]):
@@ -328,22 +303,12 @@ def test():
 def startAndCollect():
 	print('start in 10s')
 	time.sleep(11)
-	mouse.position = gtarcade_pos
-	time.sleep(1)
-	click()
-	time.sleep(5)
-	mouse.position = main_page_pos
-	time.sleep(1)
-	click()
-	time.sleep(5)
-	mouse.position = select_loa3_pos
-	time.sleep(1)
-	click()
-	time.sleep(5)
-	mouse.position = start_game_pos
-	time.sleep(1)
-	click()
-	time.sleep(5)
+
+	clickPosition(gtarcade_pos, wait=1, post_delay=5)
+	clickPosition(main_page_pos, wait=1, post_delay=5)
+	clickPosition(select_loa3_pos, wait=1, post_delay=5)
+	clickPosition(start_game_pos, wait=1, post_delay=5)
+
 	restartGuild(False)
 	time.sleep(10)
 	reopen()
@@ -379,10 +344,7 @@ def autoCollectThread():
 		detectReady()#是否准备领取下一个箱子
 		time.sleep(3)
 	if closeWhenFinished:
-		mouse.position = game_close_pos
-		time.sleep(1)
-		click()
-		time.sleep(10)
+		clickPosition(game_close_pos, pre_delay=1, post_delay=10)
 		os._exit(0)
 	return
 
@@ -449,45 +411,18 @@ def tripThread():
 	time.sleep(3)
 	for task in task_list:
 		for i in task:
-			mouse.position = i
-			time.sleep(0.5)
-			click()
-			time.sleep(3)
-			mouse.position = attack_5
-			time.sleep(0.5)
-			click()
-			time.sleep(7)
-			mouse.position = close_result
-			time.sleep(0.5)
-			click()
-			time.sleep(1.5)
-			mouse.position = attack_10
-			time.sleep(0.5)
-			click()
-			time.sleep(10)
-			mouse.position = close_result
-			time.sleep(0.5)
-			click()
-			time.sleep(1.5)
-			mouse.position = clost_task
-			time.sleep(0.5)
-			click()
-			time.sleep(1.5)
-		mouse.position = left_arrow
-		time.sleep(0.5)
-		click()
-		time.sleep(2)
+			clickPosition(i, wait=0.5, post_delay=3)
+			clickPosition(attack_5, wait=0.5, post_delay=7)
+			clickPosition(close_result, wait=0.5, post_delay=1.5)
+			clickPosition(attack_10, wait=0.5, post_delay=10)
+			clickPosition(close_result, wait=0.5, post_delay=1.5)
+			clickPosition(clost_task, wait=0.5, post_delay=1.5)
+		clickPosition(left_arrow, wait=0.5, post_delay=2)
 	time.sleep(4)
-	mouse.position = task_close
-	time.sleep(1)
-	click()
-	time.sleep(3)
+	clickPosition(task_close, wait=1, post_delay=3)
 
 	if closeWhenFinished:
-		mouse.position = game_close_pos
-		time.sleep(1)
-		click()
-		time.sleep(10)
+		clickPosition(game_close_pos, wait=1, post_delay=10)
 		os._exit(0)
 	return
 
@@ -496,7 +431,7 @@ def tripThread():
 def on_press(key):
 	try:
 		if key.char == 'p':
-			return False;
+			return False
 		elif key.char == 'q':
 			getMousePosition()
 		elif key.char == 'f':

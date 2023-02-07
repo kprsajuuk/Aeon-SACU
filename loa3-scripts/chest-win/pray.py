@@ -274,7 +274,7 @@ def on_press(key):
 		print('unknown input key')
 
 def on_release(key):
-	return;
+	return
 
 with keyboard.Listener(
 		on_press = on_press,
